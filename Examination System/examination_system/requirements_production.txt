@@ -1,0 +1,114 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Django Examination System - Production Dependencies
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# Install with: pip install -r requirements_production.txt
+#
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────
+# CORE DEPENDENCIES (from requirements.txt)
+# ───────────────────────────────────────────────────────────────────────────
+
+Django>=4.2,<5.0
+Pillow>=10.0.0
+python-docx>=1.0.0
+PyPDF2>=3.0.0
+requests>=2.31.0
+
+# ───────────────────────────────────────────────────────────────────────────
+# PRODUCTION-SPECIFIC DEPENDENCIES
+# ───────────────────────────────────────────────────────────────────────────
+
+# Production WSGI Server
+gunicorn>=21.2.0
+# Alternative: uwsgi>=2.0.22
+
+# Database (PostgreSQL recommended for production)
+psycopg2-binary>=2.9.9
+# Or use: psycopg2>=2.9.9 (requires compilation)
+
+# Static Files Serving
+whitenoise>=6.6.0
+
+# Environment Variables Management
+python-decouple>=3.8
+# Or use: python-dotenv>=1.0.0
+
+# Redis for Caching (Optional but recommended)
+redis>=5.0.0
+django-redis>=5.4.0
+
+# ───────────────────────────────────────────────────────────────────────────
+# MONITORING & ERROR TRACKING (Highly Recommended)
+# ───────────────────────────────────────────────────────────────────────────
+
+# Error tracking
+sentry-sdk>=1.38.0
+
+# Application Performance Monitoring (APM)
+# django-silk>=5.0.4  # Development profiler (disable in production)
+
+# ───────────────────────────────────────────────────────────────────────────
+# SECURITY ENHANCEMENTS
+# ───────────────────────────────────────────────────────────────────────────
+
+# Security middleware
+django-csp>=3.7  # Content Security Policy
+django-permissions-policy>=4.18.0  # Permissions-Policy header
+
+# Rate limiting
+django-ratelimit>=4.1.0
+
+# ───────────────────────────────────────────────────────────────────────────
+# ADDITIONAL UTILITIES
+# ───────────────────────────────────────────────────────────────────────────
+
+# Improved admin interface (Optional)
+django-admin-interface>=0.26.0
+
+# Timezone support
+pytz>=2023.3
+
+# Better datetime handling
+python-dateutil>=2.8.2
+
+# ───────────────────────────────────────────────────────────────────────────
+# INSTALLATION NOTES
+# ───────────────────────────────────────────────────────────────────────────
+
+"""
+INSTALLATION STEPS:
+
+1. Create a virtual environment:
+   python -m venv venv
+   
+2. Activate it:
+   Windows: venv\Scripts\activate
+   Linux/Mac: source venv/bin/activate
+   
+3. Install dependencies:
+   pip install -r requirements_production.txt
+   
+4. Set up environment variables (see env.example)
+
+5. Run migrations:
+   python manage.py migrate --settings=examination_system.settings_production
+   
+6. Collect static files:
+   python manage.py collectstatic --noinput --settings=examination_system.settings_production
+   
+7. Create superuser:
+   python manage.py createsuperuser --settings=examination_system.settings_production
+   
+8. Run production server:
+   gunicorn examination_system.wsgi:application --bind 0.0.0.0:8000 --workers 4
+"""
+
+# ───────────────────────────────────────────────────────────────────────────
+# OPTIONAL: AI/ML Dependencies (if using Ollama or other AI features)
+# ───────────────────────────────────────────────────────────────────────────
+
+# For AI question generation (if continuing to use Ollama)
+# ollama-python>=0.1.0  # Uncomment if needed
+

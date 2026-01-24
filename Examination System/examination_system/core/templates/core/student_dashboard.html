@@ -1,0 +1,1286 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>لوحة الطالب - منصة الاختبارات</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+              'FILL' 0,
+              'wght' 400,
+              'GRAD' 0,
+              'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-student-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined">school</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة الطالب</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a href="{% url 'student_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {% if active_page == 'dashboard' or not active_page %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'dashboard' or not active_page %}{% else %} group-hover:text-primary transition-colors{% endif %}">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a href="{% url 'student_exams' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'exams' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'exams' %}{% else %} group-hover:text-primary transition-colors{% endif %}">quiz</span>
+            <span>اختباراتي</span>
+        </a>
+        <a href="{% url 'student_groups' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'groups' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'groups' %}{% else %} group-hover:text-primary transition-colors{% endif %}">groups</span>
+            <span>مجموعاتي</span>
+        </a>
+        <a href="{% url 'student_dashboard' %}?page=reports" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'reports' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'reports' %}{% else %} group-hover:text-primary transition-colors{% endif %}">analytics</span>
+            <span>التقارير</span>
+        </a>
+        <a href="{% url 'student_dashboard' %}?page=stats" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'stats' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'stats' %}{% else %} group-hover:text-primary transition-colors{% endif %}">bar_chart</span>
+            <span>الإحصائيات</span>
+        </a>
+        <a href="{% url 'student_teachers' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'teachers' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'teachers' %}{% else %} group-hover:text-primary transition-colors{% endif %}">person_outline</span>
+            <span>المدرسون</span>
+        </a>
+        <a href="{% url 'student_dashboard' %}?page=settings" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {% if active_page == 'settings' %}bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium{% endif %}">
+            <span class="material-symbols-outlined{% if active_page == 'settings' %}{% else %} group-hover:text-primary transition-colors{% endif %}">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+    </nav>
+    <div class="p-4 border-t border-slate-100 dark:border-slate-700/50">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full p-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:request.user.username|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        طالب
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-outlined text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20" data-student-scroll>
+        <div class="max-w-7xl mx-auto space-y-8">
+            {% load message_filters %}
+            {% get_user_messages request 'student' as user_messages %}
+            {% if user_messages %}
+            <div class="space-y-2">
+                {% for message in user_messages %}
+                <div class="text-sm font-bold px-4 py-3 rounded-xl border
+                    {% if message.tags == 'success' %}
+                        bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300
+                    {% elif message.tags == 'error' %}
+                        bg-red-50 border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300
+                    {% elif message.tags == 'warning' %}
+                        bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-300
+                    {% else %}
+                        bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300
+                    {% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    {% if active_page == 'teachers' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">المدرسون</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            استعرض قائمة المدرسين، أرسل طلبات الانضمام، وتابع الدعوات الواردة.
+                        </p>
+                    {% elif active_page == 'exams' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">اختباراتي</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            استعرض جميع اختباراتك مع مدرسيك، وتابع حالتها بسهولة.
+                        </p>
+                    {% elif active_page == 'groups' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">مجموعاتي</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            استعرض مجموعاتك الدراسية وتابع الدردشة مع زملائك ومدرسيك.
+                        </p>
+                    {% elif active_page == 'reports' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">التقارير والمراسلات</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            متابعة رسائل مدرسيك والرد عليها وإرسال تقارير وملاحظات.
+                        </p>
+                    {% elif active_page == 'stats' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">إحصائيات أدائي</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            تحليل نتائج اختباراتك ومعرفة نقاط القوة والتحسين في مستواك.
+                        </p>
+                    {% elif active_page == 'settings' %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">الإعدادات العامة</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            تحديث بيانات حسابك الأساسية وتفضيلاتك داخل المنصة.
+                        </p>
+                    {% else %}
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">لوحة التحكم</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                            مرحباً بك، {{ request.user.full_name|default:request.user.username }}. إليك ملخص سريع لنشاطك الدراسي.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if active_page != 'teachers' and active_page != 'exams' and active_page != 'groups' and active_page != 'reports' and active_page != 'stats' and active_page != 'settings' %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 text-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">check_circle</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
+                        {{ completed_exams_count }}
+                    </div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">اختبارات مكتملة مع مدرسيك</div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">monitoring</span>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-lg">
+                            {% if gpa_percent is not None %}تقدير محسوب{% else %}لا توجد نتائج كافية{% endif %}
+                        </span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
+                        {% if gpa_percent is not None %}{{ gpa_percent }}%{% else %}--{% endif %}
+                    </div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">المعدل التراكمي التقريبي</div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined text-2xl">event_upcoming</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">
+                        {{ upcoming_exams_count }}
+                    </div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">اختبارات قادمة مع مدرسيك</div>
+                </div>
+            </div>
+
+            <section>
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                            </span>
+                            الاختبارات الجارية
+                        </h2>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% if ongoing_exam %}
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+                            <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500"></div>
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-1">
+                                        {{ ongoing_exam.title }}
+                                    </h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                                        المعلم:
+                                        {{ ongoing_exam.teacher.full_name|default:ongoing_exam.teacher.username }}
+                                    </p>
+                                </div>
+                                <div class="flex flex-col items-end gap-2">
+                                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-bold rounded-full flex items-center gap-1 animate-pulse">
+                                        <span class="material-symbols-outlined text-sm">circle</span>
+                                        متاح الآن
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 mb-6 text-sm text-slate-500 dark:text-slate-400">
+                                <div class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-lg">quiz</span>
+                                    <span>{% if ongoing_exam.subject %}{{ ongoing_exam.subject.name }}{% endif %}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-lg">schedule</span>
+                                    <span>مدة الاختبار: {{ ongoing_exam.duration_minutes }} دقيقة</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <button class="flex-1 py-2.5 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-lg">play_circle</span>
+                                    ابدأ الاختبار
+                                </button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 shadow-sm flex items-center justify-center text-sm text-slate-500 dark:text-slate-400">
+                            لا توجد اختبارات جارية حالياً.
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'stats' %}
+            <section class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary">fact_check</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">الاختبارات المنتهية</span>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-extrabold text-slate-900 dark:text-white">
+                            {{ stats_total_finished_exams }}
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            مجموع كل المحاولات التي تم إنهاؤها أو احتساب نتيجتها.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-emerald-200 dark:border-emerald-800 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-emerald-500">trending_up</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">الاختبارات المجتازة</span>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                            {{ stats_passed_exams }}
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            الاختبارات التي حصلت فيها على نسبة 50% أو أكثر.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-rose-200 dark:border-rose-800 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-rose-500">trending_down</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">الاختبارات غير المجتازة</span>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-extrabold text-rose-600 dark:text-rose-400">
+                            {{ stats_failed_exams }}
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            الاختبارات التي نتيجتها أقل من 50% أو كنت غائباً.
+                        </p>
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-indigo-200 dark:border-indigo-800 shadow-sm flex flex-col justify-between">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-indigo-500">monitoring</span>
+                                <span class="text-sm font-bold text-slate-700 dark:text-slate-300">متوسط العلامات</span>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-extrabold text-slate-900 dark:text-white">
+                            {% if stats_average_score is not None %}
+                                {{ stats_average_score|floatformat:1 }}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </div>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            متوسط علاماتك الفعلية في الاختبارات التي أديتها.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-emerald-500">star</span>
+                                <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white">أفضل اختبار</h2>
+                            </div>
+                        </div>
+                        {% if stats_best_exam %}
+                        <div class="space-y-2 text-sm">
+                            <div class="font-bold text-slate-900 dark:text-white">
+                                {{ stats_best_exam.exam.title }}
+                            </div>
+                            <div class="flex flex-wrap gap-3 text-xs text-slate-500 dark:text-slate-400">
+                                {% if stats_best_exam.exam.subject %}
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-bold">
+                                    <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                                    {{ stats_best_exam.exam.subject.name }}
+                                </span>
+                                {% endif %}
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                                    <span class="material-symbols-outlined text-[16px]">percent</span>
+                                    {{ stats_best_exam.score|floatformat:1 }}
+                                </span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-xs text-slate-400 dark:text-slate-500">
+                            لا توجد اختبارات كافية لعرض أفضل اختبار حتى الآن.
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-rose-500">warning</span>
+                                <h2 class="text-sm md:text-base font-bold text-slate-900 dark:text-white">أضعف اختبار</h2>
+                            </div>
+                        </div>
+                        {% if stats_worst_exam %}
+                        <div class="space-y-2 text-sm">
+                            <div class="font-bold text-slate-900 dark:text-white">
+                                {{ stats_worst_exam.exam.title }}
+                            </div>
+                            <div class="flex flex-wrap gap-3 text-xs text-slate-500 dark:text-slate-400">
+                                {% if stats_worst_exam.exam.subject %}
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 font-bold">
+                                    <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                                    {{ stats_worst_exam.exam.subject.name }}
+                                </span>
+                                {% endif %}
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                                    <span class="material-symbols-outlined text-[16px]">percent</span>
+                                    {{ stats_worst_exam.score|floatformat:1 }}
+                                </span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-xs text-slate-400 dark:text-slate-500">
+                            لا توجد اختبارات كافية لعرض أضعف اختبار حتى الآن.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'settings' %}
+            <section class="space-y-6 max-w-4xl mx-auto">
+                {% if account_error %}
+                <div class="rounded-2xl border border-red-200 bg-red-50 text-red-700 text-sm px-4 py-3 mb-2">
+                    {{ account_error }}
+                </div>
+                {% endif %}
+                {% if account_success %}
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-sm px-4 py-3 mb-2">
+                    {{ account_success }}
+                </div>
+                {% endif %}
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+                    <input type="hidden" name="settings_form" value="1"/>
+                    <div class="bg-white dark:bg-surface-dark p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 dark:border-slate-700/50 pb-4">
+                            <span class="material-symbols-outlined text-primary text-2xl">person</span>
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white">إعدادات الحساب الأساسية</h2>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-8 mb-8">
+                            <div class="flex flex-col items-center gap-3 shrink-0">
+                                <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 relative overflow-hidden border-2 border-slate-200 dark:border-slate-600 flex items-center justify-center text-white text-2xl font-bold bg-gradient-to-tr from-primary to-blue-400">
+                                    {{ request.user.full_name|default:request.user.username|slice:":2" }}
+                                </div>
+                            </div>
+                            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">الاسم الكامل</label>
+                                    <input name="full_name" type="text" value="{{ request.user.full_name }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-primary focus:border-primary"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">البريد الإلكتروني</label>
+                                    <input name="email" type="email" value="{{ request.user.email }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-primary focus:border-primary"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" name="profile_submit" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-xl text-sm font-bold flex items-center gap-2 transition-colors">
+                                <span class="material-symbols-outlined text-base">save</span>
+                                حفظ بيانات الحساب
+                            </button>
+                        </div>
+                        <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700/50">
+                            <h3 class="text-md font-bold text-slate-900 dark:text-white mb-4">الأمان وكلمة المرور</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">كلمة المرور الحالية</label>
+                                    <input name="current_password" type="password" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-primary focus:border-primary"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">كلمة المرور الجديدة</label>
+                                    <input name="new_password" type="password" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-white dark:bg-surface-dark text-slate-900 dark:text-white focus:ring-primary focus:border-primary"/>
+                                </div>
+                                <div class="flex items-end">
+                                    <button type="submit" name="password_submit" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors w-full md:w-auto">
+                                        تحديث كلمة المرور
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'reports' %}
+            <section class="space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+                            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100 dark:border-slate-700/50">
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-primary flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">إرسال رسالة للمدرس</h2>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">للتقارير والملاحظات والاستفسارات</p>
+                                </div>
+                            </div>
+                            <form class="space-y-5" method="post" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="student_to_teacher"/>
+                                {% if reply_to_message and reply_target_teacher %}
+                                <input type="hidden" name="in_reply_to" value="{{ reply_to_message.id }}"/>
+                                <div class="mb-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm text-primary">reply</span>
+                                    <span>الرد على رسالة من {{ reply_to_message.sender.full_name|default:reply_to_message.sender.username }}</span>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">المدرس</label>
+                                    <div class="relative">
+                                        <select name="teacher_id" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 pl-10 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white text-slate-600 appearance-none cursor-pointer">
+                                            <option disabled selected value="">اختر المدرس...</option>
+                                            {% for teacher in report_teachers %}
+                                            <option value="{{ teacher.id }}" {% if reply_target_teacher and reply_target_teacher.id == teacher.id %}selected{% endif %}>
+                                                {{ teacher.full_name|default:teacher.username }}
+                                            </option>
+                                            {% empty %}
+                                            <option disabled value="">لا يوجد مدرسون مرتبطون بك حالياً</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400 text-lg">person</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">عنوان الرسالة</label>
+                                    <div class="relative">
+                                        <input name="title" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 pl-10 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white placeholder:text-slate-400" placeholder="اكتب عنواناً مختصراً" type="text"/>
+                                        <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400 text-lg">title</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">نص الرسالة</label>
+                                    <textarea name="body" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none dark:text-white placeholder:text-slate-400" placeholder="اشرح التفاصيل هنا..." rows="5"></textarea>
+                                </div>
+                                <button class="w-full py-3.5 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all flex items-center justify-center gap-2 group" type="submit">
+                                    <span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform">send</span>
+                                    <span>إرسال الرسالة</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center">
+                                <span class="text-xs text-slate-500 dark:text-slate-400 font-bold mb-1">إجمالي الرسائل</span>
+                                <span class="text-2xl font-extrabold text-slate-900 dark:text-white">{{ student_total_messages }}</span>
+                            </div>
+                            <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center">
+                                <span class="text-xs text-primary font-bold mb-1">غير مقروءة</span>
+                                <span class="text-2xl font-extrabold text-primary">{{ student_unread_messages }}</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col overflow-hidden">
+                            <div class="p-5 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between gap-4 bg-white dark:bg-surface-dark">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center">
+                                        <span class="material-symbols-outlined">inbox</span>
+                                    </div>
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">رسائل من المدرسين</h2>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                                {% for msg in student_teacher_messages %}
+                                <div class="p-5 hover:bg-blue-50/30 dark:hover:bg-blue-900/5 transition-colors group">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 flex items-center justify-center text-xs font-bold">
+                                            {{ msg.sender.full_name|default:msg.sender.username|slice:":2" }}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center justify-between gap-2 mb-1">
+                                                <div>
+                                                    <h3 class="font-bold text-slate-900 dark:text-white text-sm">
+                                                        {{ msg.sender.full_name|default:msg.sender.username }}
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">
+                                                {{ msg.title|default_if_none:"رسالة من المدرس" }}
+                                            </p>
+                                            <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
+                                                {{ msg.body }}
+                                            </p>
+                                            <div class="mt-2 flex items-center justify-between">
+                                                <span class="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                                                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                                    <span>{{ msg.created_at|date:"Y-m-d H:i" }}</span>
+                                                </span>
+                                                <a href="{% url 'student_dashboard' %}?page=reports&reply_to={{ msg.id }}" class="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primary text-xs font-bold rounded-lg transition-colors flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-sm">reply</span>
+                                                    <span>رد</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="p-5 text-center text-xs text-slate-400 dark:text-slate-500">
+                                    لا توجد رسائل من المدرسين حالياً.
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'groups' %}
+            <section class="space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">groups</span>
+                            مجموعاتك الدراسية
+                        </h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            المجموعات التي تنتمي إليها مع مدرسيك وزملائك.
+                        </p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% if groups %}
+                        {% for group in groups %}
+                        <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all flex flex-col group h-full relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+                                        <span class="material-symbols-outlined text-2xl">groups</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary transition-colors">
+                                            {{ group.name }}
+                                        </h3>
+                                        <span class="text-xs text-slate-500 dark:text-slate-400 mt-1 block">
+                                            نشط حالياً
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 grid grid-cols-2 gap-4 mb-5 border border-slate-100 dark:border-slate-700/50">
+                                <div>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 mb-1 block">المدرس</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-slate-400">person</span>
+                                        <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                                            {{ group.teacher.full_name|default:group.teacher.username }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 mb-1 block">المادة</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-base text-slate-400">menu_book</span>
+                                        <span class="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                                            {% if group.subject %}
+                                                {{ group.subject.name }}
+                                            {% else %}
+                                                بدون مادة محددة
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-auto">
+                                <a href="{% url 'student_group_detail' group.id %}" class="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 hover:border-primary hover:text-primary text-slate-600 dark:text-slate-300 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-lg">chat</span>
+                                    <span>عرض الدردشة</span>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-span-full bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 dark:text-slate-400 text-sm h-40">
+                            لا توجد مجموعات مسجلة لك حالياً.
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'exams' %}
+            <section class="space-y-4">
+                <div class="bg-white dark:bg-surface-dark p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col lg:flex-row gap-4 items-center justify-between">
+                    <form method="get" class="flex flex-col lg:flex-row gap-4 items-center justify-between w-full">
+                        <div class="relative w-full lg:w-96 group">
+                            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                            <input
+                                type="text"
+                                name="q"
+                                value="{{ student_exams_query }}"
+                                class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all outline-none text-sm"
+                                placeholder="بحث عن اختبار بالاسم أو المادة..."
+                            />
+                        </div>
+                        <div class="flex gap-3 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+                            <select
+                                name="status"
+                                class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none cursor-pointer text-sm font-medium min-w-[140px]"
+                            >
+                                <option value="">كل الحالات</option>
+                                <option value="scheduled"{% if student_exams_selected_status == 'scheduled' %} selected{% endif %}>مجدول</option>
+                                <option value="ongoing"{% if student_exams_selected_status == 'ongoing' %} selected{% endif %}>يعمل الآن</option>
+                                <option value="finished"{% if student_exams_selected_status == 'finished' %} selected{% endif %}>منتهي</option>
+                            </select>
+                            <button
+                                type="submit"
+                                class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 transition-colors flex items-center justify-center"
+                                title="تطبيق الفلاتر"
+                            >
+                                <span class="material-symbols-outlined">sort</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-100 dark:border-slate-700/50">
+                                <tr>
+                                    <th class="px-6 py-4">اسم الاختبار</th>
+                                    <th class="px-6 py-4">المادة</th>
+                                    <th class="px-6 py-4">التاريخ والوقت</th>
+                                    <th class="px-6 py-4">الحالة</th>
+                                    <th class="px-6 py-4">العلامة</th>
+                                    <th class="px-6 py-4">الاجتياز</th>
+                                    <th class="px-6 py-4">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                                {% if enriched_exams %}
+                                    {% for item in enriched_exams %}
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="font-bold text-slate-900 dark:text-white">
+                                                {{ item.exam.title }}
+                                            </div>
+                                            <div class="text-xs text-slate-500 dark:text-slate-400">
+                                                {{ item.exam.teacher.full_name|default:item.exam.teacher.username }}
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if item.exam.subject %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                                <span class="material-symbols-outlined text-[14px]">menu_book</span>
+                                                {{ item.exam.subject.name }}
+                                            </span>
+                                            {% else %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                                <span class="material-symbols-outlined text-[14px]">menu_book</span>
+                                                غير محدد
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="material-symbols-outlined text-sm">event</span>
+                                                <span>{{ item.exam.start_time|date:"Y-m-d" }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5 text-xs mt-1 text-slate-500">
+                                                <span class="material-symbols-outlined text-sm">schedule</span>
+                                                <span>{{ item.exam.start_time|time:"h:i A" }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if item.exam.status == 'scheduled' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                                مجدول
+                                            </span>
+                                            {% elif item.exam.status == 'ongoing' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                جاري الآن
+                                            </span>
+                                            {% elif item.exam.status == 'finished' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+                                                مكتمل
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if item.score is not None %}
+                                            <div class="flex flex-col gap-1">
+                                                <span class="font-bold text-slate-900 dark:text-white">
+                                                    {{ item.score|floatformat:1 }} / {{ item.total_mark }}
+                                                </span>
+                                                <span class="text-xs text-slate-500 dark:text-slate-400">
+                                                    {{ item.score_percent }}%
+                                                </span>
+                                            </div>
+                                            {% else %}
+                                            <span class="text-slate-400 dark:text-slate-500">--</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if item.pass_status == 'pass' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                                ناجح
+                                            </span>
+                                            {% elif item.pass_status == 'fail' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                                <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                                راسب
+                                            </span>
+                                            {% elif item.pass_status == 'absent' %}
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                                                <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                                راسب
+                                            </span>
+                                            {% else %}
+                                            <span class="text-slate-400 dark:text-slate-500">--</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if item.exam.status == 'ongoing' %}
+                                            <a href="{% url 'student_exam_take' item.exam.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-blue-600 text-white rounded-lg font-bold text-xs transition-all">
+                                                <span class="material-symbols-outlined text-sm">play_circle</span>
+                                                ابدأ الاختبار
+                                            </a>
+                                            {% elif item.exam.status == 'scheduled' %}
+                                            <a href="{% url 'student_exam_scheduled_detail' item.exam.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg font-bold text-xs transition-all">
+                                                <span class="material-symbols-outlined text-sm">visibility</span>
+                                                عرض التفاصيل
+                                            </a>
+                                            {% elif item.exam.status == 'finished' %}
+                                                {% if item.pass_status == 'absent' %}
+                                                <span class="inline-flex items-center gap-2 px-4 py-2 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 rounded-lg font-bold text-xs">
+                                                    <span class="material-symbols-outlined text-sm">person_off</span>
+                                                    غائب
+                                                </span>
+                                                {% elif item.has_result %}
+                                                <a href="{% url 'student_exam_result' item.exam.id %}" class="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg font-bold text-xs transition-all">
+                                                    <span class="material-symbols-outlined text-sm">assignment_turned_in</span>
+                                                    عرض النتيجة
+                                                </a>
+                                                {% else %}
+                                                <span class="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 rounded-lg font-bold text-xs transition-all cursor-not-allowed">
+                                                    <span class="material-symbols-outlined text-sm">hourglass_empty</span>
+                                                    لم تُحتسب النتيجة بعد
+                                                </span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+                                            لا توجد اختبارات متاحة حالياً.
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'teachers' %}
+            <section class="bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-2xl p-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-1.5 h-full bg-blue-500"></div>
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">mark_email_unread</span>
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white">طلبات ودعوات من المدرسين</h2>
+                    <span class="bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                        {{ teacher_invitations|length }}
+                    </span>
+                </div>
+                <div class="space-y-3">
+                    {% if teacher_invitations %}
+                        {% for req in teacher_invitations %}
+                            <div class="bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 transition-transform hover:-translate-y-0.5 duration-200">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 text-lg font-bold">
+                                        {{ req.teacher.full_name|default:req.teacher.username|slice:":2" }}
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 dark:text-white">
+                                            {{ req.teacher.full_name|default:req.teacher.username }}
+                                        </h3>
+                                        {% if req.group %}
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                            دعوة للانضمام إلى مجموعة
+                                            <span class="font-bold text-slate-700 dark:text-slate-300">"{{ req.group.name }}"</span>
+                                        </p>
+                                        {% else %}
+                                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                                            دعوة للانضمام إلى قائمة طلاب المدرس
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <form method="post" action="{% url 'student_invitation_action' req.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="accept"/>
+                                        <button class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm shadow-sm transition-colors flex items-center gap-2" type="submit">
+                                            <span class="material-symbols-outlined text-lg">check</span>
+                                            قبول
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'student_invitation_action' req.id %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="reject"/>
+                                        <button class="px-5 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 rounded-lg font-bold text-sm transition-colors flex items-center gap-2" type="submit">
+                                            <span class="material-symbols-outlined text-lg">close</span>
+                                            رفض
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="bg-white dark:bg-surface-dark p-4 rounded-xl shadow-sm text-sm text-slate-500 dark:text-slate-400 text-center">
+                            لا توجد دعوات أو طلبات من المدرسين حالياً.
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+            {% endif %}
+
+            {% if active_page == 'dashboard' or not active_page %}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">calendar_month</span>
+                            جدول الاختبارات القادمة
+                        </h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        {% if upcoming_exams_list %}
+                            <table class="w-full text-right text-sm">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-100 dark:border-slate-700/50">
+                                <tr>
+                                    <th class="px-6 py-4">عنوان الاختبار</th>
+                                    <th class="px-6 py-4">المادة</th>
+                                    <th class="px-6 py-4">التاريخ والوقت</th>
+                                    <th class="px-6 py-4">المعلم</th>
+                                </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                                {% for exam in upcoming_exams_list %}
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="font-bold text-slate-900 dark:text-white">{{ exam.title }}</div>
+                                            {% if exam.subject %}
+                                                <div class="text-xs text-slate-500 dark:text-slate-400">
+                                                    {{ exam.subject.description|default:"" }}
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if exam.subject %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                                    {{ exam.subject.name }}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-xs text-slate-400 dark:text-slate-500">بدون مادة</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="material-symbols-outlined text-sm">event</span>
+                                                <span>{{ exam.start_time|date:"Y-m-d" }}</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5 text-xs mt-1 text-slate-500">
+                                                <span class="material-symbols-outlined text-sm">schedule</span>
+                                                <span>{{ exam.start_time|time:"H:i" }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-xs font-bold text-slate-700 dark:text-slate-200">
+                                                {{ exam.teacher.full_name|default:exam.teacher.username }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <div class="p-6 text-sm text-slate-500 dark:text-slate-400">
+                                لا توجد اختبارات قادمة حالياً مع مدرسيك.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="lg:col-span-1 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col">
+                    <div class="p-5 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-emerald-500">history_edu</span>
+                            النتائج الأخيرة
+                        </h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 max-h-[400px]">
+                        {% if recent_results %}
+                            {% for exam in recent_results %}
+                                <div class="flex items-center gap-4 p-3 hover:bg-slate-50 dark:hover:bg-slate-800/30 rounded-xl transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-300 text-sm font-bold">
+                                        {{ exam.subject.name|default:exam.title|slice:":2" }}
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-bold text-slate-900 dark:text-white text-sm">
+                                            {{ exam.title }}
+                                        </div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400">
+                                            تم الانتهاء من الاختبار في {{ exam.start_time|date:"Y-m-d" }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-sm text-slate-500 dark:text-slate-400">
+                                لا توجد نتائج اختبارات محفوظة لك حتى الآن.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if active_page == 'teachers' %}
+            <section class="mt-8" id="teachers-section">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">groups</span>
+                        المدرسون
+                    </h2>
+                    <form method="get" class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <div class="relative group flex-1 sm:w-64">
+                            <span class="material-symbols-outlined absolute top-1/2 -translate-y-1/2 right-3 text-slate-400 group-focus-within:text-primary transition-colors">search</span>
+                            <input
+                                class="w-full pr-10 pl-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                                type="text"
+                                name="teacher_q"
+                                value="{{ teacher_query }}"
+                                placeholder="بحث باسم المدرس..."
+                            />
+                        </div>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute top-1/2 -translate-y-1/2 right-3 text-slate-400 pointer-events-none">filter_list</span>
+                            <select
+                                name="teacher_subject"
+                                class="w-full sm:w-48 pr-10 pl-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-surface-dark text-sm text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="">كل المواد</option>
+                                {% for s in teacher_subject_choices %}
+                                    <option value="{{ s.id }}"{% if teacher_selected_subject|stringformat:"s" == s.id|stringformat:"s" %} selected{% endif %}>{{ s.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-emerald-500">verified</span>
+                            المدرسون الحاليون المرتبطون بك
+                        </h3>
+                        {% if current_teacher_cards %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                                {% for card in current_teacher_cards %}
+                                    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-emerald-200 dark:border-emerald-800 p-6 flex flex-col gap-5 hover:shadow-md transition-all group">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-emerald-500/20">
+                                                {{ card.teacher.full_name|default:card.teacher.username|slice:":2" }}
+                                            </div>
+                                            <div class="flex-1">
+                                                <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                                    {{ card.teacher.full_name|default:card.teacher.username }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-3 flex-1">
+                                            <div>
+                                                <p class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-sm">menu_book</span>
+                                                    المواد التي يدرّسها
+                                                </p>
+                                                {% if card.subjects %}
+                                                    <div class="flex flex-wrap gap-2">
+                                                        {% for subject_name in card.subjects %}
+                                                            <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold">
+                                                                {{ subject_name }}
+                                                            </span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="text-xs text-slate-400 dark:text-slate-500">
+                                                        لا توجد مواد محددة لهذا المدرس حالياً.
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div>
+                                                <p class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-sm">class</span>
+                                                    المجموعات المشتركة
+                                                </p>
+                                                {% if card.groups %}
+                                                    <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-1 pr-1">
+                                                        {% for group_name in card.groups %}
+                                                            <li class="flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-emerald-400 dark:before:bg-emerald-500">
+                                                                {{ group_name }}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% else %}
+                                                    <div class="text-xs text-slate-400 dark:text-slate-500">
+                                                        لا توجد مجموعات مشتركة حتى الآن.
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                                لا يوجد مدرّسون مرتبطون بك حتى الآن.
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">group_add</span>
+                            المدرسون المتاحون للانضمام
+                        </h3>
+                        {% if available_teacher_cards %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                                {% for card in available_teacher_cards %}
+                            <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col gap-5 hover:shadow-md transition-all group">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-emerald-500/20">
+                                        {{ card.teacher.full_name|default:card.teacher.username|slice:":2" }}
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                            {{ card.teacher.full_name|default:card.teacher.username }}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class="space-y-3 flex-1">
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">menu_book</span>
+                                            المواد التي يدرّسها
+                                        </p>
+                                        {% if card.subjects %}
+                                            <div class="flex flex-wrap gap-2">
+                                                {% for subject_name in card.subjects %}
+                                                    <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold">
+                                                        {{ subject_name }}
+                                                    </span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            <div class="text-xs text-slate-400 dark:text-slate-500">
+                                                لا توجد مواد محددة لهذا المدرس حالياً.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">class</span>
+                                            المجموعات
+                                        </p>
+                                        {% if card.groups %}
+                                            <ul class="text-sm text-slate-600 dark:text-slate-300 space-y-1 pr-1">
+                                                {% for group_name in card.groups %}
+                                                    <li class="flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-slate-300 dark:before:bg-slate-600">
+                                                        {{ group_name }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <div class="text-xs text-slate-400 dark:text-slate-500">
+                                                لا توجد مجموعات مشتركة حتى الآن.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% if card.has_pending_request %}
+                                    <button class="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-xl font-bold text-sm cursor-not-allowed flex items-center justify-center gap-2 mt-auto">
+                                        <span class="material-symbols-outlined text-lg">hourglass_empty</span>
+                                        تم إرسال طلب انضمام
+                                    </button>
+                                {% else %}
+                                    <form method="post" action="{% url 'student_send_join_request' card.teacher.id %}" class="mt-auto">
+                                        {% csrf_token %}
+                                        <button class="w-full py-3 bg-primary hover:bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+                                            <span class="material-symbols-outlined text-lg">person_add</span>
+                                            إرسال طلب انضمام
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="mt-2 text-sm text-slate-500 dark:text-slate-400"></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-student-sidebar]");
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", function () {
+      if (window.innerWidth >= 1024) return;
+      sidebar.classList.toggle("hidden");
+    });
+  }
+
+  // Auto-refresh exam statuses every 30 seconds
+  let syncInterval = null;
+  
+  function syncExamStatuses() {
+    fetch("{% url 'sync_exam_statuses_api' %}", {
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      credentials: "same-origin",
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success && data.updated_count > 0) {
+        // If any exam status changed, reload the page to show updated status
+        console.log(`Updated ${data.updated_count} exam status(es), reloading...`);
+        location.reload();
+      }
+    })
+    .catch(error => {
+      console.error("Error syncing exam statuses:", error);
+    });
+  }
+  
+  // Start syncing every 30 seconds
+  syncInterval = setInterval(syncExamStatuses, 30000);
+  
+  // Also sync immediately on page load
+  syncExamStatuses();
+  
+  // Clean up on page unload
+  window.addEventListener("beforeunload", function() {
+    if (syncInterval) {
+      clearInterval(syncInterval);
+    }
+  });
+});
+</script>
+</body>
+</html>
+

@@ -1,0 +1,462 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>التحليلات والتقارير - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-admin-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-rounded">psychology</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة المشرف</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_dashboard' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_users' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">manage_accounts</span>
+            <span>ادارة المستخدمين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_teachers' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">school</span>
+            <span>المدرسين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_groups' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">groups</span>
+            <span>المجموعات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_exams' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">quiz</span>
+            <span>الاختبارات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'admin_analytics' %}">
+            <span class="material-symbols-rounded">analytics</span>
+            <span>التحليلات والتقارير</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_settings' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+        <form method="post" action="{% url 'logout' %}" class="flex items-center gap-3 w-full mt-4">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:"م.أ"|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        مدير النظام
+                    </div>
+                </div>
+                <span class="material-symbols-rounded text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </nav>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-rounded">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-rounded text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-rounded text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-rounded text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">لوحة التحليلات والتقارير</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">
+                        نظرة شاملة على أداء المنصة، إحصائيات المستخدمين، والرسائل الإدارية.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm group hover:border-primary/50 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                            <span class="material-symbols-rounded">group</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">{{ total_users }}</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">إجمالي المستخدمين</div>
+                    <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex gap-2 text-[10px] text-slate-400">
+                        <span>{{ total_teachers }} مدرس</span>
+                        <span>•</span>
+                        <span>{{ total_students }} طالب</span>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm group hover:border-purple-500/50 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                            <span class="material-symbols-rounded">quiz</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">{{ total_exams }}</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">اختبار تم إنشاؤه</div>
+                    <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/50 flex gap-2 text-[10px] text-slate-400">
+                        <span>{{ active_exams }} نشط حالياً</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-lg text-slate-800 dark:text-white">إحصائيات تسجيل المستخدمين</h3>
+                        <button class="text-primary hover:bg-blue-50 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors">
+                            <span class="material-symbols-rounded text-xl">more_horiz</span>
+                        </button>
+                    </div>
+                    <div class="h-64 w-full flex items-center justify-center">
+                        <div class="text-center text-sm text-slate-400 dark:text-slate-500">
+                            <span class="material-symbols-rounded text-4xl mb-3 text-slate-300 dark:text-slate-600 block">
+                                insights
+                            </span>
+                            <p>سيتم عرض إحصائيات التسجيل هنا عند توفر بيانات تاريخية كافية.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-6">
+                    <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex-1">
+                        <h3 class="font-bold text-lg text-slate-800 dark:text-white mb-4">توزيع الأدوار</h3>
+                        <div class="flex items-center gap-6">
+                            <div class="relative w-32 h-32 shrink-0">
+                                <div class="w-full h-full rounded-full" style="background-image: {{ roles_gradient|safe }};"></div>
+                                <div class="absolute inset-4 bg-white dark:bg-surface-dark rounded-full flex items-center justify-center flex-col">
+                                    <span class="text-xs text-slate-400">الإجمالي</span>
+                                    <span class="font-bold text-slate-800 dark:text-white">100%</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">الطلاب ({{ student_percent }}%)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">المدرسين ({{ teacher_percent }}%)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                    <span class="text-slate-600 dark:text-slate-300">مشرفين ({{ staff_percent }}%)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-200 dark:border-red-800/30 flex items-center justify-between shadow-sm relative overflow-hidden group">
+                        <div class="absolute -right-6 -top-6 w-24 h-24 bg-red-100 dark:bg-red-800/20 rounded-full transition-transform group-hover:scale-150"></div>
+                        <div class="relative">
+                            <h3 class="font-bold text-red-800 dark:text-red-300 mb-1 flex items-center gap-2">
+                                <span class="material-symbols-rounded">block</span>
+                                الحسابات المحظورة
+                            </h3>
+                            <p class="text-red-600/70 dark:text-red-400/70 text-xs font-medium">تم إيقافها بسبب انتهاكات</p>
+                        </div>
+                        <div class="relative text-4xl font-black text-red-600 dark:text-red-400">{{ blocked_users }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span class="material-symbols-rounded text-primary">mail</span>
+                    التقارير والمراسلات
+                </h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-bold mb-1">الكل</span>
+                        <span class="text-2xl font-extrabold text-slate-900 dark:text-white">{{ total_messages }}</span>
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-primary/30 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-1 h-full bg-primary"></div>
+                        <span class="text-xs text-primary font-bold mb-1">رسائل غير مقروءة</span>
+                        <span class="text-2xl font-extrabold text-primary">{{ unread_messages }}</span>
+                    </div>
+                    <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center">
+                        <span class="text-xs text-emerald-600 font-bold mb-1">تم الرد</span>
+                        <span class="text-2xl font-extrabold text-slate-900 dark:text-white">{{ replied_count }}</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white mb-4">إرسال رسالة للمعلم</h3>
+                            <form class="space-y-4" method="post" action="{% url 'admin_analytics' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="admin_to_teacher"/>
+                                {% if reply_to_message and reply_target_type == "teacher" %}
+                                <input type="hidden" name="in_reply_to" value="{{ reply_to_message.id }}"/>
+                                <div class="mb-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                                    <span class="material-symbols-rounded text-sm text-primary">reply</span>
+                                    <span>الرد على رسالة من {{ reply_to_message.sender.full_name|default:reply_to_message.sender.username }}</span>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">اختر المعلم</label>
+                                    <select name="teacher_id" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white">
+                                        <option value="">اختر معلمًا</option>
+                                        {% for teacher in teachers %}
+                                            <option value="{{ teacher.id }}" {% if reply_to_message and reply_target_type == "teacher" and reply_to_message.sender.id == teacher.id %}selected{% endif %}>
+                                                {{ teacher.full_name|default:teacher.username }}
+                                            </option>
+                                        {% empty %}
+                                            <option disabled>لا يوجد معلمون مسجلون بعد</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">عنوان الرسالة</label>
+                                    <input name="teacher_title" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white placeholder:text-slate-400" placeholder="مثال: تنبيه إداري أو ملاحظة على الأداء" type="text"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">نوع الرسالة</label>
+                                    <select name="teacher_category" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white">
+                                        <option value="">بدون تصنيف</option>
+                                        <option value="support">دعم فني</option>
+                                        <option value="violation">تقرير مخالفة</option>
+                                        <option value="notice">تنبيه</option>
+                                        <option value="idea">اقتراح</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">نص الرسالة</label>
+                                    <textarea name="teacher_body" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white" placeholder="اكتب رسالتك هنا..." rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="w-full py-2.5 bg-primary text-white rounded-xl hover:bg-blue-600 transition-colors font-bold text-sm shadow-lg shadow-blue-500/20">
+                                    إرسال
+                                </button>
+                            </form>
+                        </div>
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm h-[400px] flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white">صندوق وارد رسائل المعلم</h3>
+                            </div>
+                            <div class="flex-1 overflow-y-auto space-y-3 pr-1">
+                                {% for msg in teacher_messages %}
+                                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 flex flex-col gap-1">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-xs font-bold text-blue-700 dark:text-blue-300">
+                                                {{ msg.sender.full_name|default:msg.sender.username|slice:":2" }}
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">
+                                                    {{ msg.sender.full_name|default:msg.sender.username }}
+                                                </span>
+                                                <span class="text-[11px] text-slate-400 dark:text-slate-500">
+                                                    {{ msg.created_at|date:"Y-m-d H:i" }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {% if msg.replies.exists %}
+                                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md">تم الرد</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-100">
+                                        {{ msg.title|default_if_none:"رسالة بدون عنوان" }}
+                                    </p>
+                                    <div class="flex items-center justify-between gap-2 mt-1">
+                                        <div class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-1">
+                                            {{ msg.body }}
+                                        </div>
+                                        <a href="?reply_to={{ msg.id }}" class="px-2 py-1 bg-primary/10 hover:bg-primary/20 text-primary text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1">
+                                            <span class="material-symbols-rounded text-sm">reply</span>
+                                            <span>رد</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="h-full flex items-center justify-center text-xs text-slate-400 dark:text-slate-500">
+                                    لا توجد رسائل من المدرسين حالياً.
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <h3 class="font-bold text-lg text-slate-800 dark:text-white mb-4">إرسال رسالة للمشرف</h3>
+                            <form class="space-y-4" method="post" action="{% url 'admin_analytics' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="form_type" value="admin_to_supervisor"/>
+                                {% if reply_to_message and reply_target_type == "supervisor" %}
+                                <input type="hidden" name="in_reply_to" value="{{ reply_to_message.id }}"/>
+                                <div class="mb-2 px-3 py-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-xs text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                                    <span class="material-symbols-rounded text-sm text-purple-600">reply</span>
+                                    <span>الرد على رسالة من {{ reply_to_message.sender.full_name|default:reply_to_message.sender.username }}</span>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">اختر المشرف</label>
+                                    <select name="supervisor_id" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white">
+                                        <option value="">اختر مشرفًا</option>
+                                        {% for supervisor in supervisors %}
+                                            <option value="{{ supervisor.id }}" {% if reply_to_message and reply_target_type == "supervisor" and reply_to_message.sender.id == supervisor.id %}selected{% endif %}>
+                                                {{ supervisor.full_name|default:supervisor.username }}
+                                            </option>
+                                        {% empty %}
+                                            <option disabled>لا يوجد مشرفون مسجلون بعد</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">عنوان الرسالة</label>
+                                    <input name="supervisor_title" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white placeholder:text-slate-400" placeholder="مثال: تعميم أو تحديث سياسات" type="text"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">نوع الرسالة</label>
+                                    <select name="supervisor_category" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus-border-primary dark:text-white">
+                                        <option value="">بدون تصنيف</option>
+                                        <option value="announcement">تعميم</option>
+                                        <option value="policy">سياسات</option>
+                                        <option value="notice">تنبيه</option>
+                                        <option value="other">أخرى</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">نص الرسالة</label>
+                                    <textarea name="supervisor_body" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus-border-primary dark:text-white focus:ring-primary" placeholder="اكتب رسالتك هنا..." rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="w-full py-2.5 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-bold text-sm shadow-lg shadow-purple-500/20">
+                                    إرسال
+                                </button>
+                            </form>
+                        </div>
+                        <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm h-[400px] flex flex-col">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-white">صندوق وارد رسائل المشرف</h3>
+                            </div>
+                            <div class="flex-1 overflow-y-auto space-y-3 pr-1">
+                                {% for msg in supervisor_messages %}
+                                <div class="p-3 rounded-xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800/40 flex flex-col gap-1">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-xs font-bold text-purple-700 dark:text-purple-300">
+                                                {{ msg.sender.full_name|default:msg.sender.username|slice:":2" }}
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <span class="text-sm font-bold text-slate-800 dark:text-slate-100">
+                                                    {{ msg.sender.full_name|default:msg.sender.username }}
+                                                </span>
+                                                <span class="text-[11px] text-slate-400 dark:text-slate-500">
+                                                    {{ msg.created_at|date:"Y-m-d H:i" }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        {% if msg.replies.exists %}
+                                        <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-md">تم الرد</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-100">
+                                        {{ msg.title|default_if_none:"رسالة بدون عنوان" }}
+                                    </p>
+                                    <div class="flex items-center justify-between gap-2 mt-1">
+                                        <div class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-1">
+                                            {{ msg.body }}
+                                        </div>
+                                        <a href="?reply_to={{ msg.id }}" class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/40 text-purple-700 dark:text-purple-200 text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1">
+                                            <span class="material-symbols-rounded text-sm">reply</span>
+                                            <span>رد</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="h-full flex items-center justify-center text-xs text-slate-400 dark:text-slate-500">
+                                    لا توجد رسائل من المشرفين حالياً.
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-admin-sidebar]");
+  if (!toggle || !sidebar) return;
+  toggle.addEventListener("click", function () {
+    if (window.innerWidth >= 1024) return;
+    sidebar.classList.toggle("hidden");
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>الإعدادات العامة - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #1d72eb;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #1d72eb;
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-admin-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined">psychology</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة المشرف</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_dashboard' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_users' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">manage_accounts</span>
+            <span>ادارة المستخدمين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_teachers' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">school</span>
+            <span>المدرسين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_groups' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">groups</span>
+            <span>المجموعات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_exams' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">quiz</span>
+            <span>الاختبارات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_analytics' %}">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+            <span>التحليلات والتقارير</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'admin_settings' %}">
+            <span class="material-symbols-outlined">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+        <form method="post" action="{% url 'logout' %}" class="flex items-center gap-3 w-full mt-4">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:"م.أ"|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        مدير النظام
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </nav>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-outlined text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">الإعدادات العامة</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">إدارة إعدادات النظام والمنصة.</p>
+                </div>
+            </div>
+
+            {% if account_error %}
+                <div class="rounded-2xl border border-red-200 bg-red-50 text-red-700 text-sm px-4 py-3">
+                    {{ account_error }}
+                </div>
+            {% endif %}
+            {% if account_success %}
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-sm px-4 py-3">
+                    {{ account_success }}
+                </div>
+            {% endif %}
+            {% if system_success %}
+                <div class="rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700 text-sm px-4 py-3">
+                    {{ system_success }}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                            <span class="material-symbols-outlined">manage_accounts</span>
+                        </div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">إعدادات الحساب</h2>
+                    </div>
+                    <div class="p-6 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">الاسم</label>
+                                <input name="full_name" type="text" value="{{ request.user.full_name }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">البريد الإلكتروني</label>
+                                <input name="email" type="email" value="{{ request.user.email }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mt-2">
+                            <button type="submit" name="profile_submit" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-sm font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">save</span>
+                                حفظ الاسم والبريد الإلكتروني
+                            </button>
+                        </div>
+                        <div class="pt-6 border-t border-slate-100 dark:border-slate-700/50">
+                            <h3 class="text-base font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-slate-400 text-xl">lock</span>
+                                تغيير كلمة المرور
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">كلمة المرور الحالية</label>
+                                    <input name="current_password" type="password" placeholder="أدخل كلمة المرور الحالية" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">كلمة المرور الجديدة</label>
+                                    <input name="new_password" type="password" placeholder="أدخل كلمة المرور الجديدة" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                                </div>
+                                <div class="md:col-span-2 flex justify-end mt-2">
+                                    <button type="submit" name="password_submit" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-sm font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">save</span>
+                                        تحديث كلمة المرور
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                <section class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                            <span class="material-symbols-outlined">dns</span>
+                        </div>
+                        <h2 class="text-lg font-bold text-slate-900 dark:text-white">إعدادات النظام</h2>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">اسم المنصة</label>
+                            <input name="platform_name" type="text" value="{{ settings_obj.platform_name }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">بريد 2FA (إرسال أكواد التحقق)</label>
+                            <input name="two_factor_email" type="email" value="{{ effective_two_factor_email }}" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">كلمة مرور تطبيق بريد 2FA</label>
+                            <input name="two_factor_app_password" type="password" autocomplete="new-password" placeholder="أدخل كلمة مرور التطبيق للبريد المخصص للتحقق" class="w-full rounded-xl border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 text-sm focus:ring-primary focus:border-primary dark:text-white dark:placeholder-slate-500"/>
+                            {% if settings_obj.two_factor_app_password %}
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">تم تعيين كلمة مرور تطبيق مسبقاً. اترك الحقل فارغاً إذا لا تريد تغييرها.</p>
+                            {% else %}
+                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">إذا تركت هذا الحقل فارغاً، سيتم استخدام كلمة مرور التطبيق المعرفة في إعدادات الخادم.</p>
+                            {% endif %}
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">أيقونة النظام</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 dark:border-slate-600 border-dashed rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
+                                <div class="space-y-1 text-center">
+                                    <span class="material-symbols-outlined text-4xl text-slate-400 group-hover:text-primary transition-colors">cloud_upload</span>
+                                    <div class="flex text-sm text-slate-600 dark:text-slate-400 justify-center">
+                                        <label for="system_icon" class="relative cursor-pointer rounded-md font-medium text-primary hover:text-blue-500 focus-within:outline-none">
+                                            <span>اختر ملفاً</span>
+                                            <input id="system_icon" name="system_icon" type="file" class="sr-only"/>
+                                        </label>
+                                        <p class="pr-1">أو اسحب وأفلت هنا</p>
+                                    </div>
+                                    <p class="text-xs text-slate-500">PNG, JPG, SVG حتى 2MB</p>
+                                    {% if settings_obj.system_icon %}
+                                        <p class="text-xs text-slate-500 mt-1">الملف الحالي: {{ settings_obj.system_icon.url }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:col-span-2 flex justify-end">
+                            <button type="submit" name="system_submit" class="bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-sm font-bold py-2.5 px-6 rounded-xl transition-colors shadow-sm flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">save</span>
+                                حفظ إعدادات النظام
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-admin-sidebar]");
+  if (!toggle || !sidebar) return;
+  toggle.addEventListener("click", function () {
+    if (window.innerWidth >= 1024) return;
+    sidebar.classList.toggle("hidden");
+  });
+});
+</script>
+</body>
+</html>

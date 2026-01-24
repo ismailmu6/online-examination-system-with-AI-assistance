@@ -1,0 +1,520 @@
+ERROR 2026-01-10 10:07:48,730 log Internal Server Error: /accounts/signup/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: accounts_user.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\accounts\views.py", line 72, in signup
+    user.save()
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\base_user.py", line 76, in save
+    super().save(*args, **kwargs)
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: accounts_user.username
+ERROR 2026-01-10 10:07:48,738 basehttp "POST /accounts/signup/ HTTP/1.1" 500 166499
+ERROR 2026-01-10 10:10:52,955 log Internal Server Error: /accounts/signup/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: accounts_user.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\accounts\views.py", line 72, in signup
+    user.save()
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\base_user.py", line 76, in save
+    super().save(*args, **kwargs)
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\sql\compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\backends\sqlite3\base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: accounts_user.username
+ERROR 2026-01-10 10:10:52,962 basehttp "POST /accounts/signup/ HTTP/1.1" 500 167779
+ERROR 2026-01-10 12:25:12,237 log Internal Server Error: /teacher-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 2133, in teacher_exams
+    .annotate(
+     ^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1590, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1631, in _annotate
+    raise ValueError(
+ValueError: The annotation 'submitted_count' conflicts with a field on the model.
+ERROR 2026-01-10 12:25:12,239 basehttp "GET /teacher-dashboard/exams/ HTTP/1.1" 500 91784
+ERROR 2026-01-10 12:25:22,878 log Internal Server Error: /teacher-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 2133, in teacher_exams
+    .annotate(
+     ^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1590, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1631, in _annotate
+    raise ValueError(
+ValueError: The annotation 'submitted_count' conflicts with a field on the model.
+ERROR 2026-01-10 12:25:22,885 basehttp "GET /teacher-dashboard/exams/ HTTP/1.1" 500 91767
+ERROR 2026-01-10 12:29:02,033 log Internal Server Error: /teacher-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 2133, in teacher_exams
+    .annotate(
+     ^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1590, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1631, in _annotate
+    raise ValueError(
+ValueError: The annotation 'submitted_count' conflicts with a field on the model.
+ERROR 2026-01-10 12:29:02,035 basehttp "GET /teacher-dashboard/exams/ HTTP/1.1" 500 91758
+ERROR 2026-01-10 21:51:19,684 log Internal Server Error: /teacher-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 2133, in teacher_exams
+    .annotate(
+     ^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1590, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1631, in _annotate
+    raise ValueError(
+ValueError: The annotation 'submitted_count' conflicts with a field on the model.
+ERROR 2026-01-10 21:51:19,687 basehttp "GET /teacher-dashboard/exams/ HTTP/1.1" 500 90495
+ERROR 2026-01-14 14:09:11,472 log Internal Server Error: /teacher-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 2133, in teacher_exams
+    .annotate(
+     ^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1590, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\db\models\query.py", line 1631, in _annotate
+    raise ValueError(
+ValueError: The annotation 'submitted_count' conflicts with a field on the model.
+ERROR 2026-01-14 14:09:11,475 basehttp "GET /teacher-dashboard/exams/ HTTP/1.1" 500 91538
+ERROR 2026-01-14 18:46:06,495 log Internal Server Error: /teacher-dashboard/subjects/22/question-bank/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3540, in teacher_subject_question_bank
+    generated_questions = _generate_questions_with_ollama(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3837, in _generate_questions_with_ollama
+    with urllib.request.urlopen(req, timeout=120) as resp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 515, in open
+    response = self._open(req, data)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 532, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 1373, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\urllib\request.py", line 1348, in do_open
+    r = h.getresponse()
+        ^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 1428, in getresponse
+    response.begin()
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 331, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\http\client.py", line 292, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+TimeoutError: timed out
+ERROR 2026-01-14 18:46:06,501 basehttp "POST /teacher-dashboard/subjects/22/question-bank/ HTTP/1.1" 500 178551
+ERROR 2026-01-14 19:47:01,494 views Ollama request timeout
+ERROR 2026-01-14 19:47:01,604 basehttp "POST /teacher-dashboard/subjects/22/question-bank/ HTTP/1.1" 500 229697
+ERROR 2026-01-14 19:51:46,230 log Internal Server Error: /teacher-dashboard/subjects/22/question-bank/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3451, in teacher_subject_question_bank
+    logger = logging.getLogger(__name__)
+             ^^^^^^^
+UnboundLocalError: cannot access local variable 'logging' where it is not associated with a value
+ERROR 2026-01-14 19:51:46,232 basehttp "GET /teacher-dashboard/subjects/22/question-bank/ HTTP/1.1" 500 81323
+ERROR 2026-01-14 19:51:51,810 log Internal Server Error: /teacher-dashboard/subjects/22/question-bank/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3451, in teacher_subject_question_bank
+    logger = logging.getLogger(__name__)
+             ^^^^^^^
+UnboundLocalError: cannot access local variable 'logging' where it is not associated with a value
+ERROR 2026-01-14 19:51:51,811 basehttp "GET /teacher-dashboard/subjects/22/question-bank/ HTTP/1.1" 500 81460
+ERROR 2026-01-14 19:51:54,465 log Internal Server Error: /teacher-dashboard/subjects/22/question-bank/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3451, in teacher_subject_question_bank
+    logger = logging.getLogger(__name__)
+             ^^^^^^^
+UnboundLocalError: cannot access local variable 'logging' where it is not associated with a value
+ERROR 2026-01-14 19:51:54,466 basehttp "GET /teacher-dashboard/subjects/22/question-bank/ HTTP/1.1" 500 81323
+ERROR 2026-01-14 22:35:46,199 log Internal Server Error: /student-dashboard/exams/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1378, in student_exams
+    score_percent = round((score / total_mark) * 100)
+                           ~~~~~~^~~~~~~~~~~~
+TypeError: unsupported operand type(s) for /: 'float' and 'decimal.Decimal'
+ERROR 2026-01-14 22:35:46,201 basehttp "GET /student-dashboard/exams/ HTTP/1.1" 500 84481
+ERROR 2026-01-14 22:37:52,346 log Internal Server Error: /teacher-dashboard/exams/18/results/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3106, in teacher_exam_results
+    score_percent = round((score / total_mark_sum) * 100)
+                           ~~~~~~^~~~~~~~~~~~~~~~
+TypeError: unsupported operand type(s) for /: 'float' and 'decimal.Decimal'
+ERROR 2026-01-14 22:37:52,349 basehttp "GET /teacher-dashboard/exams/18/results/ HTTP/1.1" 500 85898
+ERROR 2026-01-14 22:38:18,732 log Internal Server Error: /student-dashboard/exams/18/result/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1510, in student_exam_result
+    score_percent = round((score / total_mark) * 100)
+                           ~~~~~~^~~~~~~~~~~~
+TypeError: unsupported operand type(s) for /: 'float' and 'decimal.Decimal'
+ERROR 2026-01-14 22:38:18,733 basehttp "GET /student-dashboard/exams/18/result/ HTTP/1.1" 500 82294
+ERROR 2026-01-15 15:53:40,998 views Error in teacher_exam_student_correction: Student exam attempt not found
+Traceback (most recent call last):
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 3725, in teacher_exam_student_correction
+    raise Http404("Student exam attempt not found")
+django.http.response.Http404: Student exam attempt not found
+ERROR 2026-01-16 15:27:24,933 log Internal Server Error: /student-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1384, in student_dashboard
+    context = _build_student_dashboard_context(user, request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1221, in _build_student_dashboard_context
+    exam.start_time + timedelta(minutes=exam.duration_minutes)
+                     ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+ERROR 2026-01-16 15:27:24,937 basehttp "GET /student-dashboard/ HTTP/1.1" 500 93572
+ERROR 2026-01-16 15:27:30,181 log Internal Server Error: /student-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1384, in student_dashboard
+    context = _build_student_dashboard_context(user, request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1221, in _build_student_dashboard_context
+    exam.start_time + timedelta(minutes=exam.duration_minutes)
+                     ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+ERROR 2026-01-16 15:27:30,184 basehttp "GET /student-dashboard/ HTTP/1.1" 500 93793
+ERROR 2026-01-16 15:27:50,376 log Internal Server Error: /student-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\AppData\Local\Programs\Python\Python312\Lib\site-packages\django\contrib\auth\decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1384, in student_dashboard
+    context = _build_student_dashboard_context(user, request)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 1221, in _build_student_dashboard_context
+    exam.start_time + timedelta(minutes=exam.duration_minutes)
+                     ^^^^^^^^^
+NameError: name 'timedelta' is not defined
+ERROR 2026-01-16 15:27:50,379 basehttp "GET /student-dashboard/ HTTP/1.1" 500 93826
+ERROR 2026-01-16 18:22:03,722 views Ollama request timeout
+ERROR 2026-01-16 18:23:15,923 views Ollama request timeout
+ERROR 2026-01-16 18:46:37,043 views Ollama request timeout
+ERROR 2026-01-16 18:48:50,970 views Ollama request timeout
+ERROR 2026-01-16 18:58:21,541 views Ollama request timeout
+ERROR 2026-01-16 19:00:37,588 views Ollama request timeout
+ERROR 2026-01-16 19:01:52,374 views Ollama request timeout
+ERROR 2026-01-16 19:09:36,218 views Ollama request timeout after 120 seconds
+ERROR 2026-01-16 19:14:42,007 views Ollama request timeout after 120 seconds
+ERROR 2026-01-16 19:27:00,127 views Ollama connection error: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+ERROR 2026-01-16 19:28:30,482 views JSON error generating questions: Expecting ',' delimiter: line 5 column 18 (char 63)
+ERROR 2026-01-16 19:33:39,637 views Question 2: Error saving - 'str' object has no attribute 'get'
+Traceback (most recent call last):
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 4844, in _save_generated_questions
+    item.get("text")
+    ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2026-01-16 19:33:39,639 views Question 3: Error saving - 'str' object has no attribute 'get'
+Traceback (most recent call last):
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 4844, in _save_generated_questions
+    item.get("text")
+    ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2026-01-16 19:33:39,639 views Question 4: Error saving - 'str' object has no attribute 'get'
+Traceback (most recent call last):
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 4844, in _save_generated_questions
+    item.get("text")
+    ^^^^^^^^
+AttributeError: 'str' object has no attribute 'get'
+ERROR 2026-01-17 12:12:49,418 views Ollama request timeout after 120 seconds
+ERROR 2026-01-17 12:15:09,896 views Ollama request timeout after 120 seconds
+ERROR 2026-01-17 17:32:53,430 views Error in teacher_exam_student_correction: Student exam attempt not found
+Traceback (most recent call last):
+  File "C:\Users\maged\Documents\trae_projects\Examination System\examination_system\core\views.py", line 4149, in teacher_exam_student_correction
+    raise Http404("Student exam attempt not found")
+django.http.response.Http404: Student exam attempt not found

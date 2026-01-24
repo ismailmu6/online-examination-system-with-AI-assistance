@@ -1,0 +1,732 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>مراقبة الاختبار - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300" data-exam-id="{{ exam.id }}">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-admin-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-rounded">school</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة المدرس</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_dashboard' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'teacher_exams' %}">
+            <span class="material-symbols-rounded">quiz</span>
+            <span>اختباراتي</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_subjects' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">library_books</span>
+            <span>المواد</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_groups' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">groups</span>
+            <span>مجموعاتي</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_reports' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">analytics</span>
+            <span>التقارير</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_students' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">person_outline</span>
+            <span>الطلاب</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_settings' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+    </nav>
+    <div class="p-4 border-t border-slate-100 dark:border-slate-700/50">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full p-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:"م.أ"|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        مدرس
+                    </div>
+                </div>
+                <span class="material-symbols-rounded text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-rounded">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-rounded text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-rounded text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-rounded text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <div class="flex items-center">
+                <a href="{% url 'teacher_exams' %}" class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary dark:hover:text-primary dark:hover:border-primary transition-all font-bold shadow-sm group">
+                    <span class="material-symbols-rounded rtl:rotate-180 text-lg group-hover:-translate-x-1 transition-transform">arrow_forward</span>
+                    <span>العودة للوحة الاختبارات</span>
+                </a>
+            </div>
+
+            <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <div class="w-16 h-16 rounded-xl bg-blue-50 dark:bg-blue-900/20 text-primary flex items-center justify-center shrink-0">
+                        <span class="material-symbols-rounded text-3xl">science</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">{{ exam.title }}</h1>
+                            {% if exam.status == 'ongoing' %}
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 text-xs font-bold animate-pulse flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                مباشر
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                            {% if exam.subject %}
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-rounded text-lg">class</span>
+                                <span>المادة: {{ exam.subject.name }}</span>
+                            </span>
+                            {% endif %}
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-rounded text-lg">schedule</span>
+                                <span>بدأ: {{ exam.start_time|time:"H:i" }}</span>
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <span class="material-symbols-rounded text-lg">timer</span>
+                                <span>المدة: {{ exam.duration_minutes }} دقيقة</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 w-full md:w-auto justify-center md:justify-end bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700/50">
+                    <div class="text-center px-4">
+                        <div class="text-sm text-slate-500 dark:text-slate-400 font-bold mb-1">الوقت المتبقي</div>
+                        <div class="text-3xl font-mono font-bold text-slate-900 dark:text-white tracking-widest" data-timer>
+                            {{ remaining_time_display }}
+                        </div>
+                    </div>
+                    <div class="h-10 w-px bg-slate-200 dark:bg-slate-700"></div>
+                    <div class="flex flex-col gap-2">
+                        <form method="post" action="{% url 'teacher_exam_end' exam.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full px-4 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:hover:bg-red-900/40 dark:text-red-400 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1">
+                                <span class="material-symbols-rounded text-sm">stop_circle</span>
+                                إنهاء الاختبار
+                            </button>
+                        </form>
+                        <button type="button" data-open-notify class="w-full px-4 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 dark:bg-surface-dark dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1">
+                            <span class="material-symbols-rounded text-sm">campaign</span>
+                            تنويه للطلاب
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                        <span class="material-symbols-rounded">group</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white" data-stat-active>
+                            {{ stats.active_students }}
+                            <span class="text-sm text-slate-400 font-normal">/{{ stats.total_students }}</span>
+                        </div>
+                        <div class="text-xs font-bold text-slate-500 dark:text-slate-400">الطلاب النشطون</div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                        <span class="material-symbols-rounded">assignment_turned_in</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white" data-stat-submitted>{{ stats.submitted }}</div>
+                        <div class="text-xs font-bold text-slate-500 dark:text-slate-400">تم التسليم</div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center text-xl shrink-0">
+                        <span class="material-symbols-rounded">person_off</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white" data-stat-absent>{{ stats.absent }}</div>
+                        <div class="text-xs font-bold text-slate-500 dark:text-slate-400">الغائبون</div>
+                    </div>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/10 p-5 rounded-2xl border border-red-100 dark:border-red-900/30 shadow-sm flex items-center gap-4 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 h-full w-1 bg-red-500"></div>
+                    <div class="w-12 h-12 rounded-full bg-white dark:bg-red-900/30 text-red-500 flex items-center justify-center text-xl shrink-0 shadow-sm">
+                        <span class="material-symbols-rounded">warning</span>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-red-600 dark:text-red-400">{{ stats.suspicions }}</div>
+                        <div class="text-xs font-bold text-red-600/70 dark:text-red-400/70">حالات اشتباه</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col">
+                    <div class="p-4 border-b border-slate-100 dark:border-slate-700/50 flex flex-wrap items-center justify-between gap-3">
+                        <h2 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-rounded text-primary">videocam</span>
+                            مراقبة الكاميرات
+                        </h2>
+                        <div class="flex gap-2">
+                            <div class="relative">
+                                <span class="material-symbols-rounded absolute right-2.5 top-2 text-slate-400 text-lg">search</span>
+                                <input type="text" class="pr-9 pl-3 py-1.5 bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm w-48 focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="بحث عن طالب..."/>
+                            </div>
+                            <button class="p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+                                <span class="material-symbols-rounded">filter_list</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                            {% for s in students %}
+                            <div class="relative aspect-video bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm" data-student-tile="{{ s.student_id }}">
+                                <!-- Snapshot Image (سيتم تحديثها تلقائياً) -->
+                                <img 
+                                    id="snapshot-{{ s.student_id }}"
+                                    class="w-full h-full object-cover"
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23334155' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' fill='%23475569' font-size='60' text-anchor='middle' dominant-baseline='middle'%3E👤%3C/text%3E%3C/svg%3E"
+                                    alt="{{ s.name }}"
+                                />
+                                
+                                <div class="absolute top-3 right-3 flex flex-col gap-1">
+                                    <!-- أزرار التحكم الصوتي -->
+                                    <div class="flex items-center gap-1">
+                                        <button type="button" 
+                                                onclick="toggleListenToStudent({{ s.student_id }})"
+                                                id="listen-btn-{{ s.student_id }}"
+                                                class="px-2 py-1 text-[10px] font-bold rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur border border-blue-400/20 flex items-center gap-1"
+                                                title="استمع لهذا الطالب">
+                                            <span class="material-symbols-rounded text-xs">headset</span>
+                                            <span>استمع</span>
+                                        </button>
+                                        <button type="button"
+                                                onclick="toggleSpeakToStudent({{ s.student_id }})"
+                                                id="speak-btn-{{ s.student_id }}"
+                                                class="px-2 py-1 text-[10px] font-bold rounded bg-green-500/20 hover:bg-green-500/30 text-green-200 backdrop-blur border border-green-400/20 flex items-center gap-1"
+                                                title="تحدث مع هذا الطالب">
+                                            <span class="material-symbols-rounded text-xs">mic</span>
+                                            <span>تحدث</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- أزرار الإجراءات -->
+                                    <div class="flex items-center gap-1">
+                                        <form method="post" action="{% url 'teacher_exam_student_action' exam.id s.student_id %}" onsubmit="return confirm('هل تريد إنهاء الاختبار لهذا الطالب؟ سيتم حفظ إجاباته الحالية.');">
+                                            {% csrf_token %}
+                                            <button type="submit" name="action" value="force_submit" class="px-2 py-1 text-[10px] font-bold rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur border border-blue-400/20" title="إنهاء الاختبار وحفظ النتيجة الحالية">
+                                                إنهاء
+                                            </button>
+                                        </form>
+                                        <form method="post" action="{% url 'teacher_exam_student_action' exam.id s.student_id %}" onsubmit="return confirm('هل تريد ترسيب هذا الطالب بسبب الغش؟ سيتم إنهاء اختباره فوراً.');">
+                                            {% csrf_token %}
+                                            <button type="submit" name="action" value="fail_cheating" class="px-2 py-1 text-[10px] font-bold rounded bg-red-500/20 hover:bg-red-500/30 text-red-200 backdrop-blur border border-red-400/20" title="ترسيب الطالب بسبب الغش">
+                                                ترسيب
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent text-white">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-bold text-sm">{{ s.name }}</div>
+                                            <div class="text-[10px] flex items-center gap-1" data-student-status="{{ s.student_id }}">
+                                                {% if s.status == 'active' %}
+                                                <span class="w-1.5 h-1.5 rounded-full bg-green-500" data-status-dot="{{ s.student_id }}"></span>
+                                                <span data-status-label="{{ s.student_id }}">نشط الآن</span>
+                                                {% elif s.status == 'submitted' %}
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" data-status-dot="{{ s.student_id }}"></span>
+                                                <span data-status-label="{{ s.student_id }}">تم التسليم</span>
+                                                {% else %}
+                                                <span class="w-1.5 h-1.5 rounded-full bg-slate-400" data-status-dot="{{ s.student_id }}"></span>
+                                                <span data-status-label="{{ s.student_id }}">غير متصل</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col items-end gap-1">
+                                            <span class="text-[10px] font-bold" data-student-progress="{{ s.student_id }}">{{ s.progress }}%</span>
+                                            <div class="w-12 h-1 bg-slate-600 rounded-full overflow-hidden">
+                                                <div class="bg-primary h-full" style="width: {{ s.progress }}%" data-student-progress-bar="{{ s.student_id }}"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-span-full text-center text-sm text-slate-500 dark:text-slate-400 py-6">
+                                لا يوجد طلاب نشطون لعرضهم حالياً.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col h-full overflow-hidden">
+                    <div class="p-4 border-b border-slate-100 dark:border-slate-700/50">
+                        <h2 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-rounded text-amber-500">history</span>
+                            سجل النشاطات المباشر
+                        </h2>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-0" data-activity-log-container>
+                        {% for log in activity_log %}
+                        <div class="p-4 border-b border-slate-100 dark:border-slate-700/50 flex gap-3 {% if log.type == 'alert' %}bg-red-50/40 dark:bg-red-900/10{% endif %}">
+                            <div class="mt-1">
+                                <span class="w-2 h-2 rounded-full block {% if log.type == 'alert' %}bg-red-500{% elif log.type == 'submit' %}bg-emerald-500{% elif log.type == 'progress' %}bg-blue-500{% else %}bg-slate-300{% endif %}"></span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="text-xs font-bold {% if log.type == 'alert' %}text-red-600 dark:text-red-400{% else %}text-slate-600 dark:text-slate-300{% endif %}">
+                                        {{ log.title }}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400">{{ log.time }}</span>
+                                </div>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mb-1">{{ log.message }}</p>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <div class="w-5 h-5 rounded-full bg-slate-200 text-slate-600 text-[10px] flex items-center justify-center font-bold">
+                                        {{ log.initials }}
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-900 dark:text-white">{{ log.student_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
+                            لا توجد نشاطات مسجلة حتى الآن.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-admin-sidebar]");
+  if (!toggle || !sidebar) return;
+  toggle.addEventListener("click", function () {
+    if (window.innerWidth >= 1024) return;
+    sidebar.classList.toggle("hidden");
+  });
+
+  var examId = document.body.getAttribute("data-exam-id");
+  var openNotify = document.querySelector("[data-open-notify]");
+  if (openNotify && examId) {
+    openNotify.addEventListener("click", function () {
+      var msg = window.prompt("اكتب التنبيه الذي تريد إرساله للطلاب:");
+      if (!msg) return;
+      var form = document.createElement("form");
+      form.method = "post";
+      form.action = "/teacher-dashboard/exams/" + examId + "/monitor/notify/";
+      var csrf = document.querySelector("input[name=csrfmiddlewaretoken]");
+      if (csrf) {
+        var csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "csrfmiddlewaretoken";
+        csrfInput.value = csrf.value;
+        form.appendChild(csrfInput);
+      }
+      var messageInput = document.createElement("input");
+      messageInput.type = "hidden";
+      messageInput.name = "message";
+      messageInput.value = msg;
+      form.appendChild(messageInput);
+      document.body.appendChild(form);
+      form.submit();
+    });
+  }
+
+  function setStatus(studentId, status) {
+    var statusEl = document.querySelector('[data-student-status=\"' + studentId + '\"]');
+    var dotEl = document.querySelector('[data-status-dot=\"' + studentId + '\"]');
+    var labelEl = document.querySelector('[data-status-label=\"' + studentId + '\"]');
+    if (!statusEl || !dotEl || !labelEl) return;
+    if (status === "active") {
+      dotEl.className = "w-1.5 h-1.5 rounded-full bg-green-500";
+      labelEl.textContent = "نشط الآن";
+    } else if (status === "submitted") {
+      dotEl.className = "w-1.5 h-1.5 rounded-full bg-emerald-500";
+      labelEl.textContent = "تم التسليم";
+    } else {
+      dotEl.className = "w-1.5 h-1.5 rounded-full bg-slate-400";
+      labelEl.textContent = "غير متصل";
+    }
+  }
+
+  function refreshData() {
+    if (!examId) return;
+    fetch("/teacher-dashboard/exams/" + examId + "/monitor/data/", { headers: { "X-Requested-With": "XMLHttpRequest" } })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || !data.ok) return;
+        var activeEl = document.querySelector("[data-stat-active]");
+        var submittedEl = document.querySelector("[data-stat-submitted]");
+        var absentEl = document.querySelector("[data-stat-absent]");
+        if (activeEl) activeEl.childNodes[0].textContent = data.stats.active_students.toString() + " ";
+        if (submittedEl) submittedEl.textContent = data.stats.submitted.toString();
+        if (absentEl) absentEl.textContent = data.stats.absent.toString();
+
+        // Update timer
+        var timerEl = document.querySelector("[data-timer]");
+        if (timerEl && data.remaining_seconds !== undefined) {
+            var mins = Math.floor(data.remaining_seconds / 60);
+            var secs = data.remaining_seconds % 60;
+            timerEl.textContent = (mins < 10 ? "0" + mins : mins) + ":" + (secs < 10 ? "0" + secs : secs);
+        }
+
+        // Update students
+        (data.students || []).forEach(function (s) {
+          setStatus(s.student_id, s.status);
+          var pEl = document.querySelector('[data-student-progress=\"' + s.student_id + '\"]');
+          var barEl = document.querySelector('[data-student-progress-bar=\"' + s.student_id + '\"]');
+          if (pEl) pEl.textContent = (s.progress || 0).toString() + "%";
+          if (barEl) barEl.style.width = (s.progress || 0).toString() + "%";
+        });
+
+        // Update activity log
+        var logContainer = document.querySelector("[data-activity-log-container]");
+        if (logContainer && data.activity_log) {
+            var html = "";
+            if (data.activity_log.length === 0) {
+                html = '<div class="p-4 text-center text-sm text-slate-500 dark:text-slate-400">لا توجد نشاطات مسجلة حتى الآن.</div>';
+            } else {
+                data.activity_log.forEach(function(log) {
+                    var colorClass = "";
+                    var dotClass = "bg-slate-300";
+                    var titleClass = "text-slate-600 dark:text-slate-300";
+                    
+                    if (log.type === "alert") {
+                        colorClass = "bg-red-50/40 dark:bg-red-900/10";
+                        dotClass = "bg-red-500";
+                        titleClass = "text-red-600 dark:text-red-400";
+                    } else if (log.type === "submit") {
+                        dotClass = "bg-emerald-500";
+                    } else if (log.type === "progress") {
+                        dotClass = "bg-blue-500";
+                    }
+
+                    html += '<div class="p-4 border-b border-slate-100 dark:border-slate-700/50 flex gap-3 ' + colorClass + '">';
+                    html += '  <div class="mt-1"><span class="w-2 h-2 rounded-full block ' + dotClass + '"></span></div>';
+                    html += '  <div class="flex-1">';
+                    html += '    <div class="flex justify-between items-start mb-1">';
+                    html += '      <span class="text-xs font-bold ' + titleClass + '">' + log.title + '</span>';
+                    html += '      <span class="text-[10px] text-slate-400">' + log.time + '</span>';
+                    html += '    </div>';
+                    html += '    <p class="text-xs text-slate-600 dark:text-slate-300 mb-1">' + log.message + '</p>';
+                    html += '    <div class="flex items-center gap-2 mt-2">';
+                    html += '      <div class="w-5 h-5 rounded-full bg-slate-200 text-slate-600 text-[10px] flex items-center justify-center font-bold">' + log.initials + '</div>';
+                    html += '      <span class="text-xs font-bold text-slate-900 dark:text-white">' + log.student_name + '</span>';
+                    html += '    </div>';
+                    html += '  </div>';
+                    html += '</div>';
+                });
+            }
+            logContainer.innerHTML = html;
+        }
+      })
+      .catch(function () {});
+  }
+
+  refreshData();
+  setInterval(refreshData, 5000);
+  
+  // ============================================================================
+  // PROCTOR SYSTEM - نظام المراقبة المتقدم للمدرس
+  // ============================================================================
+  
+  // تحميل نظام المراقبة
+  var proctorScript = document.createElement('script');
+  proctorScript.src = "{% static 'js/proctor-teacher.js' %}";
+  proctorScript.onload = function() {
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var proctor = new ProctorTeacher(examId, csrfToken);
+    
+    // بدء الاستماع لجميع الطلاب النشطين
+    var activeStudentIds = Array.from(document.querySelectorAll('[data-student-tile]')).map(function(tile) {
+      return parseInt(tile.getAttribute('data-student-tile'));
+    });
+    
+    if (activeStudentIds.length > 0) {
+      console.log('[Monitor] Proctor ready for students:', activeStudentIds);
+      // لا نستمع تلقائياً - المدرس يختار يدوياً من يريد الاستماع له
+      
+      // تحديث snapshots كل ثانية - شبه فيديو حي!
+      setInterval(function() {
+        activeStudentIds.forEach(function(studentId) {
+          proctor.getStudentSnapshots(studentId).then(function(data) {
+            if (data && data.ok && data.last_snapshot_base64) {
+              var img = document.getElementById('snapshot-' + studentId);
+              if (img) {
+                img.src = data.last_snapshot_base64;
+              }
+            }
+          });
+        });
+      }, 1000);
+      
+      // تحديث أول مرة فوراً
+      setTimeout(function() {
+        activeStudentIds.forEach(function(studentId) {
+          proctor.getStudentSnapshots(studentId).then(function(data) {
+            if (data && data.ok && data.last_snapshot_base64) {
+              var img = document.getElementById('snapshot-' + studentId);
+              if (img) {
+                img.src = data.last_snapshot_base64;
+              }
+            }
+          });
+        });
+      }, 1000);
+    }
+    
+    // أزرار التحكم بالصوت (في الـ header)
+    var headerActions = document.querySelector('.lg\\:col-span-2 .flex.items-center.gap-3');
+    if (headerActions) {
+      // زر التحدث الجماعي
+      var broadcastBtn = document.createElement('button');
+      broadcastBtn.id = 'broadcast-btn';
+      broadcastBtn.className = 'px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2';
+      broadcastBtn.innerHTML = '<span class="material-symbols-rounded">mic_off</span><span>تحدث مع الكل</span>';
+      broadcastBtn.title = 'اضغط للتحدث مع جميع الطلاب';
+      
+      broadcastBtn.onclick = function() {
+        if (!proctor.isBroadcasting) {
+          // بدء البث
+          broadcastBtn.disabled = true;
+          broadcastBtn.innerHTML = '<span class="material-symbols-rounded animate-spin">sync</span><span>جاري التفعيل...</span>';
+          
+          proctor.startBroadcast(null).then(function(success) {
+            if (success) {
+              broadcastBtn.disabled = false;
+              broadcastBtn.className = 'px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2 animate-pulse';
+              broadcastBtn.innerHTML = '<span class="material-symbols-rounded">mic</span><span>🔴 البث نشط - اضغط للإيقاف</span>';
+              broadcastBtn.title = 'الميكروفون مفتوح - الطلاب يسمعونك الآن';
+              
+              // إظهار إشعار
+              var notification = document.createElement('div');
+              notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-3 animate-bounce';
+              notification.innerHTML = '<span class="material-symbols-rounded text-2xl">mic</span><span class="font-bold">🔴 الميكروفون مفتوح - الطلاب يسمعونك الآن!</span>';
+              document.body.appendChild(notification);
+              
+              setTimeout(function() {
+                notification.remove();
+              }, 3000);
+            } else {
+              broadcastBtn.disabled = false;
+              broadcastBtn.innerHTML = '<span class="material-symbols-rounded">mic_off</span><span>تحدث مع الكل</span>';
+            }
+          }).catch(function(error) {
+            console.error('Broadcast error:', error);
+            broadcastBtn.disabled = false;
+            broadcastBtn.innerHTML = '<span class="material-symbols-rounded">mic_off</span><span>تحدث مع الكل</span>';
+            alert('فشل تفعيل الميكروفون. تأكد من السماح بالوصول للميكروفون.');
+          });
+        } else {
+          // إيقاف البث
+          broadcastBtn.disabled = true;
+          broadcastBtn.innerHTML = '<span class="material-symbols-rounded animate-spin">sync</span><span>جاري الإيقاف...</span>';
+          
+          proctor.stopBroadcast().then(function() {
+            broadcastBtn.disabled = false;
+            broadcastBtn.className = 'px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl font-bold text-sm shadow-lg transition-all flex items-center gap-2';
+            broadcastBtn.innerHTML = '<span class="material-symbols-rounded">mic_off</span><span>تحدث مع الكل</span>';
+            broadcastBtn.title = 'اضغط للتحدث مع جميع الطلاب';
+          });
+        }
+      };
+      
+      headerActions.insertBefore(broadcastBtn, headerActions.firstChild);
+      
+      // إضافة مؤشر حالة الميكروفون
+      var micStatus = document.createElement('div');
+      micStatus.id = 'mic-status';
+      micStatus.className = 'px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center gap-2';
+      micStatus.innerHTML = '<span class="material-symbols-rounded text-sm">mic_off</span><span>الميكروفون مغلق</span>';
+      headerActions.insertBefore(micStatus, headerActions.firstChild);
+      
+      // تحديث مؤشر الحالة
+      setInterval(function() {
+        if (proctor.isBroadcasting) {
+          micStatus.className = 'px-3 py-2 bg-red-100 dark:bg-red-900/30 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-2 animate-pulse';
+          micStatus.innerHTML = '<span class="material-symbols-rounded text-sm">mic</span><span>🔴 البث نشط</span>';
+        } else {
+          micStatus.className = 'px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center gap-2';
+          micStatus.innerHTML = '<span class="material-symbols-rounded text-sm">mic_off</span><span>الميكروفون مغلق</span>';
+        }
+      }, 500);
+    }
+    
+    // تنظيف عند الخروج
+    window.addEventListener('beforeunload', function() {
+      proctor.cleanup();
+    });
+    
+    // ============================================================================
+    // التحكم الفردي بالطلاب
+    // ============================================================================
+    
+    var currentListeningStudentId = null; // الطالب الذي نستمع له حالياً
+    var currentSpeakingStudentId = null;  // الطالب الذي نتحدث معه حالياً
+    
+    /**
+     * تبديل الاستماع لطالب محدد
+     */
+    window.toggleListenToStudent = function(studentId) {
+      var btn = document.getElementById('listen-btn-' + studentId);
+      
+      if (currentListeningStudentId === studentId) {
+        // إيقاف الاستماع
+        proctor.stopListeningToStudent(studentId);
+        currentListeningStudentId = null;
+        
+        btn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur border border-blue-400/20 flex items-center gap-1';
+        btn.innerHTML = '<span class="material-symbols-rounded text-xs">headset</span><span>استمع</span>';
+        
+      } else {
+        // إيقاف الاستماع للطالب السابق (إن وجد)
+        if (currentListeningStudentId) {
+          proctor.stopListeningToStudent(currentListeningStudentId);
+          var oldBtn = document.getElementById('listen-btn-' + currentListeningStudentId);
+          if (oldBtn) {
+            oldBtn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur border border-blue-400/20 flex items-center gap-1';
+            oldBtn.innerHTML = '<span class="material-symbols-rounded text-xs">headset</span><span>استمع</span>';
+          }
+        }
+        
+        // بدء الاستماع للطالب الجديد
+        proctor.listenToStudent(studentId);
+        currentListeningStudentId = studentId;
+        
+        btn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-blue-600 text-white backdrop-blur border border-blue-400 flex items-center gap-1 animate-pulse';
+        btn.innerHTML = '<span class="material-symbols-rounded text-xs">headset</span><span>🔊 نشط</span>';
+      }
+    };
+    
+    /**
+     * تبديل التحدث مع طالب محدد
+     */
+    window.toggleSpeakToStudent = function(studentId) {
+      var btn = document.getElementById('speak-btn-' + studentId);
+      
+      if (currentSpeakingStudentId === studentId) {
+        // إيقاف التحدث
+        proctor.stopBroadcast();
+        currentSpeakingStudentId = null;
+        
+        btn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-green-500/20 hover:bg-green-500/30 text-green-200 backdrop-blur border border-green-400/20 flex items-center gap-1';
+        btn.innerHTML = '<span class="material-symbols-rounded text-xs">mic</span><span>تحدث</span>';
+        
+      } else {
+        // إيقاف التحدث مع الطالب السابق (إن وجد)
+        if (currentSpeakingStudentId) {
+          proctor.stopBroadcast();
+          var oldBtn = document.getElementById('speak-btn-' + currentSpeakingStudentId);
+          if (oldBtn) {
+            oldBtn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-green-500/20 hover:bg-green-500/30 text-green-200 backdrop-blur border border-green-400/20 flex items-center gap-1';
+            oldBtn.innerHTML = '<span class="material-symbols-rounded text-xs">mic</span><span>تحدث</span>';
+          }
+        }
+        
+        // بدء التحدث مع الطالب الجديد
+        proctor.startBroadcast(studentId).then(function(success) {
+          if (success) {
+            currentSpeakingStudentId = studentId;
+            btn.className = 'px-2 py-1 text-[10px] font-bold rounded bg-green-600 text-white backdrop-blur border border-green-400 flex items-center gap-1 animate-pulse';
+            btn.innerHTML = '<span class="material-symbols-rounded text-xs">mic</span><span>🎤 نشط</span>';
+          }
+        });
+      }
+    };
+    
+  };
+  document.head.appendChild(proctorScript);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+@startuml Examination System - Class Diagram
+!theme plain
+skinparam roundcorner 10
+skinparam shadowing true
+skinparam linetype ortho
+
+skinparam class {
+    BackgroundColor<<UserManagement>> #E3F2FD
+    BackgroundColor<<AcademicManagement>> #F1F8E9
+    BackgroundColor<<ExamManagement>> #FFF3E0
+    BackgroundColor<<Proctoring>> #FCE4EC
+    BackgroundColor<<Communication>> #E8EAF6
+    BackgroundColor<<System>> #F5F5F5
+    BorderColor #1976D2
+    ArrowColor #1976D2
+    TitleFontSize 13
+    TitleFontStyle bold
+    FontSize 11
+}
+
+package "Enumerations" {
+    enum ExamStatus {
+        draft
+        scheduled
+        ongoing
+        finished
+    }
+
+    enum QuestionDifficulty {
+        easy
+        medium
+        hard
+    }
+
+    enum QuestionQuestionType {
+        mcq
+        essay
+    }
+
+    enum StudentExamStatus {
+        in_progress
+        finished
+        failed_cheating
+    }
+
+    enum ExamEventEventType {
+        join
+        submit
+        progress
+        cheating_visibility
+        cheating_clipboard
+        camera_allowed
+        camera_denied
+    }
+
+    enum StudentJoinRequestSource {
+        from_student
+        from_teacher
+    }
+
+    enum StudentJoinRequestStatus {
+        pending
+        accepted
+        rejected
+    }
+
+    enum MessageDirection {
+        teacher_to_supervisor
+        supervisor_to_teacher
+        teacher_to_student
+        student_to_teacher
+        supervisor_to_supervisor
+    }
+
+    enum ProctorAudioStreamStreamStatus {
+        waiting
+        active
+        paused
+        ended
+    }
+
+    enum UserRole {
+        student
+        teacher
+    }
+
+}
+
+package "User Management" <<UserManagement>> {
+
+    class User <<extends AbstractUser>> {
+        +username: String
+        +email: String
+        +is_active: Boolean
+        +role: String
+        +full_name: String
+        +__str__(): String
+    }
+
+    class TeacherNotificationSettings {
+        +__str__(): String
+    }
+
+}
+
+package "Academic Management" <<AcademicManagement>> {
+
+    class Subject {
+        +name: String
+        +__str__(): String
+    }
+
+    class Group {
+        +name: String
+        +code: String
+        +__str__(): String
+    }
+
+    class Question {
+        +text: String
+        +__str__(): String
+    }
+
+    class QuestionChoice {
+        +text: String
+        +__str__(): String
+    }
+
+}
+
+package "Exam Management" <<ExamManagement>> {
+
+    class Exam {
+        +title: String
+        +start_time: DateTime
+        +duration_minutes: Integer
+        +status: String
+        +total_mark: Integer
+        +pass_mark: Integer
+        +__str__(): String
+    }
+
+    class ExamQuestion {
+        +__str__(): String
+    }
+
+    class StudentExam {
+        +status: String
+        +score: Decimal
+        +__str__(): String
+    }
+
+    class StudentAnswer {
+        +__str__(): String
+    }
+
+    class ExamEvent {
+        +message: String
+        +__str__(): String
+    }
+
+    class ExamNotification {
+        +message: String
+        +__str__(): String
+    }
+
+}
+
+package "Proctoring System" <<Proctoring>> {
+
+    class ProctorSession {
+        +is_active: Boolean
+        +camera_enabled: Boolean
+        +microphone_enabled: Boolean
+        +__str__(): String
+    }
+
+    class ProctorSnapshot {
+        +suspicious: Boolean
+        +__str__(): String
+    }
+
+    class ProctorAudioStream {
+        +status: String
+        +__str__(): String
+    }
+
+}
+
+package "Communication System" <<Communication>> {
+
+    class Message {
+        +title: String
+        +body: String
+        +is_read: Boolean
+        +__str__(): String
+    }
+
+    class GroupMessage {
+        +content: String
+        +__str__(): String
+    }
+
+    class StudentJoinRequest {
+        +status: String
+        +__str__(): String
+    }
+
+}
+
+package "System Configuration" <<System>> {
+
+    class SystemSettings {
+        +platform_name: String
+        +two_factor_email: String
+        +__str__(): String
+        +{static} load(): SystemSettings
+    }
+
+}
+
+User "1" *-- "1" TeacherNotificationSettings : owns
+Subject "1" o-- "*" Group : organizes
+Subject "1" *-- "*" Question : defines
+Question "1" *-- "*" QuestionChoice : has
+Subject "1" o-- "*" Exam : offers
+Exam "1" *-- "*" ExamQuestion : contains
+Exam "1" o-- "*" StudentExam : attempts
+Exam "1" *-- "*" ExamEvent : logs
+ExamQuestion "1" o-- "*" StudentAnswer : answered by
+StudentExam "1" *-- "*" StudentAnswer : includes
+Exam "1" o-- "*" ProctorSession : monitors
+StudentExam "0..1" --> "*" ProctorSession : linked
+ProctorSession "1" *-- "*" ProctorSnapshot : captures
+ProctorSession "1" *-- "1" ProctorAudioStream : streams
+Group "1" *-- "*" GroupMessage : messages
+Message "0..1" --> "*" Message : replies_to
+Group "1" o-- "*" StudentJoinRequest : requests
+User "1" --> "*" Subject : teaches
+User "*" --> "*" Subject : enrolled_in
+User "1" --> "*" Group : manages
+User "*" --> "*" Group : member_of
+User "1" --> "*" Question : creates
+User "1" --> "*" Exam : creates
+User "*" --> "*" Exam : allowed_for
+User "1" --> "*" StudentExam : attempts
+User "1" --> "*" ExamEvent : triggers
+User "1" --> "*" Message : sends
+User "1" --> "*" Message : receives
+Exam "1" *-- "*" ExamNotification : notifies
+User "1" --> "*" GroupMessage : sends
+User "1" --> "*" StudentJoinRequest : submits
+User "1" --> "*" StudentJoinRequest : receives
+Question "*" --> "*" ExamQuestion : reused_in
+QuestionChoice "0..1" --> "*" StudentAnswer : selected
+
+@enduml

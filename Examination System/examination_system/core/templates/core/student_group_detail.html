@@ -1,0 +1,320 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>دردشة المجموعة - منصة الاختبارات الذكية</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+<style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+              'FILL' 0,
+              'wght' 400,
+              'GRAD' 0,
+              'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300">
+<div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+<div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">school</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة الطالب</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'student_dashboard' %}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+<span>لوحة التحكم</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'student_exams' %}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">quiz</span>
+<span>اختباراتي</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'student_groups' %}">
+<span class="material-symbols-outlined">groups</span>
+<span>مجموعاتي</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+<span>التقارير</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'student_teachers' %}">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">person_outline</span>
+<span>المدرسون</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-100 dark:border-slate-700/50">
+<form method="post" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="flex items-center gap-3 w-full p-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group" type="submit">
+<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                {{ request.user.full_name|default:request.user.username|slice:":2" }}
+            </div>
+<div class="flex-1 overflow-hidden">
+<div class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ request.user.full_name|default:request.user.username }}</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">طالب</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+</button>
+</form>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+<button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-3 md:gap-4">
+<div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+<button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+<button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+</div>
+<button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+<span class="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+</button>
+<button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+<div class="max-w-6xl mx-auto space-y-6">
+<nav class="flex items-center text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="{% url 'student_dashboard' %}">
+<span class="material-symbols-outlined text-lg">home</span>
+                    الرئيسية
+                </a>
+<span class="material-symbols-outlined text-lg mx-2 text-slate-300 rtl:rotate-180">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="{% url 'student_groups' %}">مجموعاتي</a>
+<span class="material-symbols-outlined text-lg mx-2 text-slate-300 rtl:rotate-180">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-bold">{{ group.name }}</span>
+</nav>
+<div class="flex flex-col gap-4 mb-4">
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-2xl">groups</span>
+</div>
+<div>
+<h1 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">
+                            {{ group.name }}
+                        </h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            المدرس:
+                            <span class="font-bold text-slate-800 dark:text-slate-200">
+                                {{ group.teacher.full_name|default:group.teacher.username }}
+                            </span>
+                        </p>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-sm text-slate-500">menu_book</span>
+<span>
+                                {% if group.subject %}
+                                    {{ group.subject.name }}
+                                {% else %}
+                                    بدون مادة محددة
+                                {% endif %}
+                            </span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800">
+<span class="material-symbols-outlined text-sm text-emerald-500">group</span>
+<span>أعضاء المجموعة: {{ members_count }}</span>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col h-[70vh] max-h-[70vh]">
+<div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-bold text-slate-500 dark:text-slate-400">دردشة المجموعة مع المدرس</span>
+</div>
+</div>
+<div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/40 dark:bg-slate-900/30">
+{% if chat_messages %}
+    {% for msg in chat_messages %}
+        {% if msg.sender_id == request.user.id %}
+        <div class="flex items-end justify-end gap-3 group">
+            <div class="flex flex-col items-end max-w-[75%]">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[10px] text-slate-400">
+                        {{ msg.created_at|time:"H:i" }}
+                    </span>
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                        أنت
+                    </span>
+                </div>
+                <div class="bg-primary text-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed whitespace-pre-wrap break-words">
+                    {{ msg.content }}
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/30 flex items-center justify-center text-xs font-bold text-primary shadow-sm">
+                {{ request.user.full_name|default:request.user.username|slice:":2" }}
+            </div>
+        </div>
+        {% else %}
+        <div class="flex items-end justify-start gap-3 group">
+            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-700 dark:text-slate-100 shadow-sm">
+                {{ msg.sender.full_name|default:msg.sender.username|slice:":2" }}
+            </div>
+            <div class="flex flex-col items-start max-w-[75%]">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                        {{ msg.sender.full_name|default:msg.sender.username }}
+                    </span>
+                    <span class="text-[10px] text-slate-400">
+                        {{ msg.created_at|time:"H:i" }}
+                    </span>
+                </div>
+                <div class="bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 text-slate-800 dark:text-slate-100 p-3 rounded-2xl rounded-tr-none shadow-sm text-sm leading-relaxed whitespace-pre-wrap break-words">
+                    {{ msg.content }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div class="h-full flex flex-col items-center justify-center text-center text-slate-400 text-sm">
+        <span class="material-symbols-outlined text-4xl mb-2">chat_bubble</span>
+        <p>لا توجد رسائل بعد. ابدأ المحادثة مع مدرسك وزملائك.</p>
+    </div>
+{% endif %}
+</div>
+<form method="post" class="p-4 bg-white dark:bg-surface-dark border-t border-slate-200 dark:border-slate-700">
+{% csrf_token %}
+<div class="relative flex items-end gap-2">
+<button type="button" class="p-2 text-slate-400 hover:text-primary transition-colors rounded-full hover:bg-slate-50 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea
+        name="message"
+        rows="1"
+        class="flex-1 max-h-32 resize-none text-sm bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 dark:text-white placeholder:text-slate-400"
+        placeholder="اكتب رسالتك هنا..."
+    ></textarea>
+<button
+        type="submit"
+        class="p-3 bg-primary hover:bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center"
+    >
+<span class="material-symbols-outlined text-xl -scale-x-100">send</span>
+</button>
+</div>
+{% if message_error %}
+<p class="text-xs text-red-500 mt-1">{{ message_error }}</p>
+{% endif %}
+<p class="text-[10px] text-slate-400 text-center mt-2">
+                        اضغط Enter للإرسال، Shift + Enter لسطر جديد
+                    </p>
+</form>
+</div>
+<div class="hidden lg:flex flex-col h-[70vh] max-h-[70vh] bg-slate-50 dark:bg-slate-800/50 border-l border-slate-200 dark:border-slate-700 rounded-2xl">
+<div class="p-4 border-b border-slate-200 dark:border-slate-700/50">
+<h3 class="font-bold text-slate-900 dark:text-white mb-2">
+                            الأعضاء ({{ members_count }})
+                        </h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input
+                                type="text"
+                                class="w-full h-9 pr-8 pl-3 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-xs focus:outline-none focus:border-primary transition-all dark:text-white"
+                                placeholder="بحث عن عضو..."
+                            />
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-2 space-y-1">
+{% for member in members %}
+<div class="w-full p-2 flex items-center gap-3 hover:bg-white dark:hover:bg-slate-700 rounded-lg transition-colors text-right group">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-600 flex items-center justify-center font-bold text-xs text-slate-700 dark:text-slate-100">
+                                {{ member.full_name|default:member.username|slice:":2" }}
+                            </div>
+<div class="flex-1 overflow-hidden">
+<div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                                    {{ member.full_name|default:member.username }}
+                                </div>
+<div class="text-[10px] text-slate-400 font-medium">
+                                    {% if member.id == group.teacher_id %}
+                                        المدرس
+                                    {% else %}
+                                        طالب
+                                    {% endif %}
+                                </div>
+</div>
+</div>
+{% empty %}
+<div class="px-4 py-6 text-center text-xs text-slate-400">
+                            لا يوجد أعضاء في هذه المجموعة بعد.
+                        </div>
+{% endfor %}
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+    (function () {
+        const container = document.getElementById("chat-container");
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
+    })();
+</script>
+</body>
+</html>
+

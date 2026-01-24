@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>لوحة التحكم - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              "xl": "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-admin-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-rounded">psychology</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة المشرف</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'admin_dashboard' %}">
+            <span class="material-symbols-rounded">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_users' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">manage_accounts</span>
+            <span>ادارة المستخدمين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_teachers' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">school</span>
+            <span>المدرسين</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_groups' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">groups</span>
+            <span>المجموعات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_exams' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">quiz</span>
+            <span>الاختبارات</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_analytics' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">analytics</span>
+            <span>التحليلات والتقارير</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'admin_settings' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+        <form method="post" action="{% url 'logout' %}" class="flex items-center gap-3 w-full mt-4">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:"م.أ"|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        مدير النظام
+                    </div>
+                </div>
+                <span class="material-symbols-rounded text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </nav>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-rounded">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-rounded text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-rounded text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-rounded text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+        <div class="max-w-7xl mx-auto space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">نظرة عامة</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                        مرحباً {{ request.user.full_name|default:request.user.username }}، إليك ملخص لأداء المنصة اليوم.
+                    </p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="px-5 py-2.5 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2 shadow-sm">
+                        <span class="material-symbols-rounded text-lg">calendar_today</span>
+                        <span>آخر 30 يوم</span>
+                    </button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/20 text-primary rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-rounded text-2xl">group</span>
+                        </div>
+                        <span class="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-lg">
+                            <span class="material-symbols-rounded text-sm ml-1">schedule</span>
+                            مباشر
+                        </span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">{{ total_users }}</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">إجمالي المستخدمين</div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-red-50 dark:bg-red-900/20 text-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-rounded text-2xl">block</span>
+                        </div>
+                        <span class="flex items-center text-xs font-bold text-red-600 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-lg">
+                            <span class="material-symbols-rounded text-sm ml-1">info</span>
+                            إجمالي
+                        </span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">{{ blocked_users }}</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">الحسابات المحظورة / غير النشطة</div>
+                </div>
+                <div class="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-rounded text-2xl">edit_document</span>
+                        </div>
+                        <span class="flex items-center text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1 rounded-lg">
+                            <span class="material-symbols-rounded text-sm ml-1">insights</span>
+                            إحصائي
+                        </span>
+                    </div>
+                    <div class="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">{{ active_tests }}</div>
+                    <div class="text-sm text-slate-500 dark:text-slate-400 font-medium">اختبارات نشطة</div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col">
+                <div class="p-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">أحدث الاختبارات</h3>
+                    <a class="text-sm font-bold text-primary hover:underline" href="{% url 'admin_exams' %}">عرض الكل</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold">
+                            <tr>
+                                <th class="px-6 py-4 rounded-tr-xl">اسم الاختبار</th>
+                                <th class="px-6 py-4">المعلم</th>
+                                <th class="px-6 py-4">التاريخ</th>
+                                <th class="px-6 py-4">الحالة</th>
+                                <th class="px-6 py-4 rounded-tl-xl">المشاركين</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                            {% if latest_exams %}
+                                {% for exam in latest_exams %}
+                                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                        <td class="px-6 py-4 font-bold text-slate-800 dark:text-slate-200">
+                                            {{ exam.title }}
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                            {{ exam.teacher.full_name|default:exam.teacher.username }}
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-500">
+                                            {{ exam.start_time|date:"d M، Y" }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {% if exam.status == "ongoing" %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                                    نشط
+                                                </span>
+                                            {% elif exam.status == "scheduled" %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                                    مجدول
+                                                </span>
+                                            {% elif exam.status == "finished" %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                                                    منتهي
+                                                </span>
+                                            {% elif exam.status == "draft" %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                                    مسودة
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                                                    غير معروف
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                            {% if exam.total_participants %}
+                                                {{ exam.total_participants }}
+                                            {% else %}
+                                                --
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="px-6 py-4 text-slate-500 dark:text-slate-400 text-sm">
+                                        لا توجد اختبارات لعرضها حالياً.
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-admin-sidebar]");
+  if (!toggle || !sidebar) return;
+  toggle.addEventListener("click", function () {
+    if (window.innerWidth >= 1024) return;
+    sidebar.classList.toggle("hidden");
+  });
+});
+</script>
+</body>
+</html>

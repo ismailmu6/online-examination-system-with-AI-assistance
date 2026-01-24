@@ -1,0 +1,287 @@
+%% Mermaid ERD for Examination System (derived from Django models)
+%% Syntax reference: https://mermaid.js.org/syntax/entityRelationshipDiagram.html
+
+erDiagram
+    %% =========================
+    %% Core Entities (Tables)
+    %% =========================
+
+    USER {
+        bigint id PK
+        string username UK
+        string email
+        string role
+        string full_name
+    }
+
+    TEACHER_NOTIFICATION_SETTINGS {
+        bigint id PK
+        bigint user_id FK, UK
+        boolean exam_submissions_email
+        boolean exam_submissions_app
+        boolean student_messages_email
+        boolean student_messages_app
+        boolean cheating_attempts_email
+        boolean cheating_attempts_app
+        boolean supervisor_messages_email
+        boolean supervisor_messages_app
+    }
+
+    SUBJECT {
+        bigint id PK
+        string name
+        bigint teacher_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    GROUP {
+        bigint id PK
+        string name
+        string code UK
+        bigint subject_id FK
+        bigint teacher_id FK
+        datetime created_at
+    }
+
+    QUESTION {
+        bigint id PK
+        bigint subject_id FK
+        bigint teacher_id FK
+        string question_type
+        string difficulty
+        decimal mark
+        datetime created_at
+        datetime updated_at
+    }
+
+    QUESTION_CHOICE {
+        bigint id PK
+        bigint question_id FK
+        string text
+        boolean is_correct
+        int order
+    }
+
+    EXAM {
+        bigint id PK
+        string title
+        bigint subject_id FK
+        bigint teacher_id FK
+        datetime start_time
+        int duration_minutes
+        string status
+        int total_mark
+        int pass_mark
+        datetime created_at
+        datetime updated_at
+    }
+
+    EXAM_QUESTION {
+        bigint id PK
+        bigint exam_id FK
+        bigint question_id FK
+        int order
+        decimal mark
+    }
+
+    STUDENT_EXAM {
+        bigint id PK
+        bigint exam_id FK
+        bigint student_id FK
+        string status
+        datetime started_at
+        datetime finished_at
+        datetime last_activity_at
+        decimal score
+        datetime created_at
+    }
+
+    STUDENT_ANSWER {
+        bigint id PK
+        bigint attempt_id FK
+        bigint exam_question_id FK
+        bigint selected_choice_id FK
+        string essay_text
+        boolean is_correct
+        decimal mark_obtained
+        datetime answered_at
+    }
+
+    EXAM_EVENT {
+        bigint id PK
+        bigint exam_id FK
+        bigint student_id FK
+        string event_type
+        string message
+        datetime created_at
+    }
+
+    EXAM_NOTIFICATION {
+        bigint id PK
+        bigint exam_id FK
+        bigint sender_id FK
+        bigint recipient_id FK
+        string message
+        datetime created_at
+    }
+
+    GROUP_MESSAGE {
+        bigint id PK
+        bigint group_id FK
+        bigint sender_id FK
+        string content
+        datetime created_at
+    }
+
+    STUDENT_JOIN_REQUEST {
+        bigint id PK
+        bigint student_id FK
+        bigint teacher_id FK
+        bigint group_id FK
+        string status
+        string source
+        datetime created_at
+    }
+
+    MESSAGE {
+        bigint id PK
+        bigint sender_id FK
+        bigint recipient_id FK
+        bigint in_reply_to_id FK
+        string direction
+        string title
+        string body
+        string category
+        boolean is_read
+        datetime created_at
+    }
+
+    SYSTEM_SETTINGS {
+        bigint id PK
+        string platform_name
+        string two_factor_email
+        string two_factor_app_password
+    }
+
+    PROCTOR_SESSION {
+        bigint id PK
+        bigint exam_id FK
+        bigint student_id FK
+        bigint student_exam_id FK
+        boolean is_active
+        boolean camera_enabled
+        boolean microphone_enabled
+        datetime created_at
+        datetime updated_at
+        datetime ended_at
+    }
+
+    PROCTOR_SNAPSHOT {
+        bigint id PK
+        bigint session_id FK
+        int faces_detected
+        boolean suspicious
+        string notes
+        datetime created_at
+    }
+
+    PROCTOR_AUDIO_STREAM {
+        bigint id PK
+        bigint session_id FK, UK
+        string status
+        bigint bytes_received
+        int packets_lost
+        datetime started_at
+        datetime last_activity_at
+        datetime ended_at
+    }
+
+    %% =========================
+    %% M2M Join Tables (implicit Django through tables)
+    %% =========================
+
+    SUBJECT_STUDENTS {
+        bigint id PK
+        bigint subject_id FK
+        bigint user_id FK
+    }
+
+    GROUP_STUDENTS {
+        bigint id PK
+        bigint group_id FK
+        bigint user_id FK
+    }
+
+    EXAM_ALLOWED_STUDENTS {
+        bigint id PK
+        bigint exam_id FK
+        bigint user_id FK
+    }
+
+    %% =========================
+    %% Relationships (Crow's Foot)
+    %% =========================
+
+    %% User & settings
+    USER ||--|| TEACHER_NOTIFICATION_SETTINGS : has
+
+    %% Subjects
+    USER ||--o{ SUBJECT : teaches
+    SUBJECT }o--o{ USER : enrolls
+    SUBJECT ||--o{ GROUP : groups
+    SUBJECT ||--o{ QUESTION : questions
+    SUBJECT ||--o{ EXAM : exams
+
+    %% Groups
+    USER ||--o{ GROUP : manages
+    GROUP }o--o{ USER : members
+    GROUP ||--o{ GROUP_MESSAGE : messages
+    GROUP ||--o{ STUDENT_JOIN_REQUEST : join_requests
+
+    %% Questions
+    QUESTION ||--o{ QUESTION_CHOICE : choices
+
+    %% Exams and attempts
+    EXAM ||--o{ EXAM_QUESTION : includes
+    QUESTION ||--o{ EXAM_QUESTION : used_in
+    EXAM ||--o{ STUDENT_EXAM : attempts
+    USER ||--o{ STUDENT_EXAM : takes
+    STUDENT_EXAM ||--o{ STUDENT_ANSWER : answers
+    EXAM_QUESTION ||--o{ STUDENT_ANSWER : answered_for
+    QUESTION_CHOICE |o--o{ STUDENT_ANSWER : selected
+    EXAM ||--o{ EXAM_EVENT : events
+    USER ||--o{ EXAM_EVENT : triggers
+
+    %% Exam notifications
+    EXAM ||--o{ EXAM_NOTIFICATION : notifications
+    USER ||--o{ EXAM_NOTIFICATION : sends
+    USER |o--o{ EXAM_NOTIFICATION : receives
+
+    %% Proctoring
+    EXAM ||--o{ PROCTOR_SESSION : proctor_sessions
+    USER ||--o{ PROCTOR_SESSION : monitored_student
+    STUDENT_EXAM |o--o{ PROCTOR_SESSION : linked_attempt
+    PROCTOR_SESSION ||--o{ PROCTOR_SNAPSHOT : snapshots
+    PROCTOR_SESSION ||--|| PROCTOR_AUDIO_STREAM : audio_stream
+
+    %% Messaging
+    USER ||--o{ MESSAGE : sends
+    USER ||--o{ MESSAGE : receives
+    MESSAGE |o--o{ MESSAGE : replies
+
+    %% Join requests
+    USER ||--o{ STUDENT_JOIN_REQUEST : requested_by
+    USER ||--o{ STUDENT_JOIN_REQUEST : received_by
+    GROUP |o--o{ STUDENT_JOIN_REQUEST : for_group
+
+    %% M2M join tables (explicit)
+    SUBJECT ||--o{ SUBJECT_STUDENTS : subject_students
+    USER ||--o{ SUBJECT_STUDENTS : subject_students
+
+    GROUP ||--o{ GROUP_STUDENTS : group_students
+    USER ||--o{ GROUP_STUDENTS : group_students
+
+    EXAM ||--o{ EXAM_ALLOWED_STUDENTS : allowed_students
+    USER ||--o{ EXAM_ALLOWED_STUDENTS : allowed_students
+

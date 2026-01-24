@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>بنك الأسئلة - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-admin-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-rounded">school</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة المدرس</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_dashboard' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_exams' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">quiz</span>
+            <span>اختباراتي</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20" href="{% url 'teacher_subjects' %}">
+            <span class="material-symbols-rounded">library_books</span>
+            <span>المواد</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_groups' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">groups</span>
+            <span>مجموعاتي</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_reports' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">analytics</span>
+            <span>التقارير</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_students' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">person_outline</span>
+            <span>الطلاب</span>
+        </a>
+        <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 rounded-xl transition-colors font-medium group" href="{% url 'teacher_settings' %}">
+            <span class="material-symbols-rounded group-hover:text-primary transition-colors">settings</span>
+            <span>الإعدادات العامة</span>
+        </a>
+    </nav>
+</aside>
+<main class="flex-1 flex flex-col">
+    <header class="h-20 border-b border-slate-200 dark:border-slate-700/80 bg-white/80 dark:bg-surface-dark/90 backdrop-blur flex items-center justify-between px-4 lg:px-8 gap-4">
+        <div class="flex items-center gap-3">
+            <button class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300" data-admin-sidebar-toggle>
+                <span class="material-symbols-rounded">menu</span>
+            </button>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-lg md:text-2xl font-extrabold text-slate-900 dark:text-white">
+                        بنك أسئلة مادة {{ subject.name }}
+                    </h1>
+                </div>
+                <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm font-medium mt-0.5">
+                    إدارة الأسئلة اليدوية والتوليد بالذكاء الاصطناعي لهذه المادة.
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="{% url 'teacher_subjects' %}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300 hover:text-primary hover:border-primary dark:hover:text-primary dark:hover:border-primary transition-all text-xs font-bold">
+                <span class="material-symbols-rounded rtl:rotate-180 text-base">arrow_forward</span>
+                <span>العودة للمواد</span>
+            </a>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20 bg-slate-50 dark:bg-surface-dark">
+        <div class="max-w-7xl mx-auto space-y-6">
+            {% load message_filters %}
+            {% get_user_messages request 'teacher' as user_messages %}
+            {% if user_messages %}
+            <div class="space-y-2">
+                {% for message in user_messages %}
+                <div class="text-sm font-bold px-4 py-3 rounded-xl border
+                    {% if message.tags == 'success' %}
+                        bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300
+                    {% elif message.tags == 'error' %}
+                        bg-red-50 border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300
+                    {% elif message.tags == 'warning' %}
+                        bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-300
+                    {% else %}
+                        bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-300
+                    {% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-2 text-xs md:text-sm text-slate-500 dark:text-slate-400">
+                    <a href="{% url 'teacher_dashboard' %}" class="hover:text-primary transition-colors flex items-center gap-1">
+                        <span class="material-symbols-rounded text-base">home</span>
+                        <span>الرئيسية</span>
+                    </a>
+                    <span class="material-symbols-rounded text-[18px] text-slate-300">chevron_left</span>
+                    <a href="{% url 'teacher_subjects' %}" class="hover:text-primary transition-colors">
+                        المواد
+                    </a>
+                    <span class="material-symbols-rounded text-[18px] text-slate-300">chevron_left</span>
+                    <span class="text-slate-800 dark:text-slate-200 font-bold truncate">
+                        {{ subject.name }}
+                    </span>
+                    <span class="material-symbols-rounded text-[18px] text-slate-300">chevron_left</span>
+                    <span class="text-slate-800 dark:text-slate-200 font-bold">
+                        بنك الأسئلة
+                    </span>
+                </div>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-3">
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
+                        إدارة بنك الأسئلة
+                    </h1>
+                    <div class="text-xs md:text-sm font-bold bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-300 px-4 py-2 rounded-xl border border-blue-100 dark:border-blue-800/50 flex items-center gap-2 w-fit">
+                        <span class="material-symbols-rounded text-base">library_books</span>
+                        <span class="truncate max-w-[200px] md:max-w-xs">
+                            {{ subject.name }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] gap-6 items-start">
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                        <div class="p-5 lg:p-6 border-b border-slate-100 dark:border-slate-700/50">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-rounded text-xl">edit_document</span>
+                                </div>
+                                <div>
+                                    <h2 class="text-base md:text-lg font-bold text-slate-900 dark:text-white">
+                                        إضافة سؤال يدوياً
+                                    </h2>
+                                    <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                        اختر نوع السؤال للبدء في إنشائه وإضافته إلى بنك الأسئلة للمادة.
+                                    </p>
+                                </div>
+                            </div>
+                            <p class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400">
+                                سيتم حفظ الأسئلة في بنك الأسئلة لهذه المادة لتتمكن من إعادة استخدامها في الاختبارات المختلفة لاحقاً.
+                            </p>
+                        </div>
+                        <div class="p-5 lg:p-6 space-y-4">
+                            <form method="post" class="space-y-5">
+                                {% csrf_token %}
+                                <input type="hidden" id="question-type-input" name="question_type" value="{{ form_data.question_type|default:'mcq' }}">
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <button
+                                        type="button"
+                                        data-question-type="mcq"
+                                        class="question-type-card flex items-center gap-4 p-4 rounded-2xl transition-all relative overflow-hidden text-right
+                                        {% if form_data.question_type == 'essay' %}
+                                            border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/30
+                                        {% else %}
+                                            border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/20
+                                        {% endif %}
+                                        "
+                                    >
+                                        <div class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                            <span class="material-symbols-rounded text-2xl">check_box</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-bold text-slate-900 dark:text-white text-sm md:text-base">اختيار من متعدد</div>
+                                            <div class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">سؤال بإجابات محددة مسبقاً</div>
+                                        </div>
+                                        <span class="material-symbols-rounded text-blue-500 text-xl absolute top-3 left-3 mcq-selected-icon {% if form_data.question_type == 'essay' %}hidden{% endif %}">
+                                            check_circle
+                                        </span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        data-question-type="essay"
+                                        class="question-type-card flex items-center gap-4 p-4 rounded-2xl transition-all relative overflow-hidden text-right
+                                        {% if form_data.question_type == 'essay' %}
+                                            border-2 border-purple-500 bg-purple-50/50 dark:bg-purple-900/20
+                                        {% else %}
+                                            border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/30
+                                        {% endif %}
+                                        "
+                                    >
+                                        <div class="w-11 h-11 rounded-xl bg-white dark:bg-slate-700 text-purple-600 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-600">
+                                            <span class="material-symbols-rounded text-2xl">subject</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="font-bold text-slate-900 dark:text-white text-sm md:text-base">سؤال مقالي</div>
+                                            <div class="text-[11px] md:text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">سؤال يتطلب إجابة كتابية</div>
+                                        </div>
+                                    </button>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">نص السؤال</label>
+                                        <textarea name="text" rows="3" class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="اكتب نص السؤال هنا...">{{ form_data.text }}</textarea>
+                                        {% if errors.text %}
+                                        <p class="text-xs text-red-500 mt-1">{{ errors.text }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">درجة السؤال</label>
+                                            <input type="number" step="0.25" min="0.25" name="mark" value="{{ form_data.mark|default:'1' }}" class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="مثال: 1"/>
+                                            {% if errors.mark %}
+                                            <p class="text-xs text-red-500 mt-1">{{ errors.mark }}</p>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">الصعوبة</label>
+                                            <select name="difficulty" class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
+                                                <option value="easy" {% if form_data.difficulty == "easy" %}selected{% endif %}>سهل</option>
+                                                <option value="medium" {% if form_data.difficulty == "medium" or not form_data.difficulty %}selected{% endif %}>متوسط</option>
+                                                <option value="hard" {% if form_data.difficulty == "hard" %}selected{% endif %}>صعب</option>
+                                            </select>
+                                            {% if errors.difficulty %}
+                                            <p class="text-xs text-red-500 mt-1">{{ errors.difficulty }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="mcq-fields" class="space-y-4 {% if form_data.question_type != 'mcq' %}hidden{% endif %}">
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-200">خيارات الإجابة (اختيار من متعدد)</h4>
+                                        {% if errors.choices %}
+                                        <p class="text-xs text-red-500">{{ errors.choices }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div id="choices-container" class="space-y-3">
+                                        <div class="flex items-center gap-3 choice-row" data-index="0">
+                                            <input type="radio" name="correct_choice" value="0" class="w-4 h-4 text-blue-600 border-slate-300 focus:ring-primary/40">
+                                            <div class="flex-1 relative">
+                                                <input name="choices[0][text]" type="text" class="choice-input w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="الخيار الأول">
+                                                <span class="correct-badge absolute left-3 top-2.5 text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/50 px-2 py-0.5 rounded hidden">
+                                                    صحيح
+                                                </span>
+                                            </div>
+                                            <button type="button" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all" data-remove-choice>
+                                                <span class="material-symbols-rounded text-base">delete</span>
+                                            </button>
+                                        </div>
+                                        <div class="flex items-center gap-3 choice-row" data-index="1">
+                                            <input type="radio" name="correct_choice" value="1" class="w-4 h-4 text-blue-600 border-slate-300 focus:ring-primary/40">
+                                            <div class="flex-1 relative">
+                                                <input name="choices[1][text]" type="text" class="choice-input w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="الخيار الثاني">
+                                                <span class="correct-badge absolute left-3 top-2.5 text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/50 px-2 py-0.5 rounded hidden">
+                                                    صحيح
+                                                </span>
+                                            </div>
+                                            <button type="button" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all" data-remove-choice>
+                                                <span class="material-symbols-rounded text-base">delete</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="next-choice-index" value="2">
+                                    <button type="button" id="add-choice-btn" class="mt-2 flex items-center gap-2 text-primary font-bold text-xs hover:bg-primary/5 px-4 py-2 rounded-xl transition-colors border border-dashed border-primary/30 w-full sm:w-auto justify-center">
+                                        <span class="material-symbols-rounded text-base">add_circle</span>
+                                        <span>إضافة خيار آخر</span>
+                                    </button>
+                                </div>
+
+                                <div id="essay-fields" class="space-y-4 {% if form_data.question_type != 'essay' %}hidden{% endif %}">
+                                    <div class="space-y-2">
+                                        <label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">الإجابة النموذجية (اختياري)</label>
+                                        <textarea name="model_answer" rows="4" class="w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="اكتب الإجابة النموذجية التي سيسترشد بها المصحح...">{{ form_data.model_answer }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors flex items-center gap-2 text-sm">
+                                        <span class="material-symbols-rounded text-base">save</span>
+                                        <span>حفظ السؤال</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden flex flex-col">
+                        <div class="p-5 lg:p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-rounded text-slate-400">format_list_bulleted</span>
+                                <h3 class="font-bold text-slate-800 dark:text-white">
+                                    الأسئلة الحالية ({{ questions|length }})
+                                </h3>
+                            </div>
+                            <form method="get" class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                                <div class="relative w-full sm:w-64">
+                                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-rounded text-base">search</span>
+                                    <input name="q" value="{{ query }}" class="w-full pl-4 pr-9 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-xs md:text-sm font-medium" placeholder="بحث في نص السؤال..." type="text"/>
+                                </div>
+                                <div class="flex gap-2">
+                                    <select name="question_type" class="rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs md:text-sm py-2 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-slate-700 dark:text-slate-200">
+                                        <option value="">كل الأنواع</option>
+                                        <option value="mcq" {% if selected_type == "mcq" %}selected{% endif %}>اختيار من متعدد</option>
+                                        <option value="essay" {% if selected_type == "essay" %}selected{% endif %}>مقالي</option>
+                                    </select>
+                                    <select name="difficulty" class="rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-xs md:text-sm py-2 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-slate-700 dark:text-slate-200">
+                                        <option value="">كل المستويات</option>
+                                        <option value="easy" {% if selected_difficulty == "easy" %}selected{% endif %}>سهل</option>
+                                        <option value="medium" {% if selected_difficulty == "medium" %}selected{% endif %}>متوسط</option>
+                                        <option value="hard" {% if selected_difficulty == "hard" %}selected{% endif %}>صعب</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="divide-y divide-slate-100 dark:divide-slate-700">
+                            {% if questions %}
+                                {% for q in questions %}
+                                <div class="p-5 lg:p-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                                    <div class="flex items-start gap-4">
+                                        <div class="w-10 h-10 rounded-lg {% if q.question_type == 'mcq' %}bg-blue-50 text-blue-600 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-900/30{% else %}bg-purple-50 text-purple-600 border border-purple-100 dark:bg-purple-900/20 dark:border-purple-900/30{% endif %} flex items-center justify-center shrink-0 mt-1">
+                                            <span class="material-symbols-rounded">
+                                                {% if q.question_type == 'mcq' %}check_box{% else %}subject{% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-start justify-between gap-4 mb-2">
+                                                <h3 class="font-bold text-slate-900 dark:text-white text-base leading-relaxed">
+                                                    {{ q.text }}
+                                                </h3>
+                                                <div class="flex items-center gap-2 shrink-0">
+                                                    <a href="{% url 'teacher_question_edit' subject.id q.id %}" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-900/30 transition-colors text-[11px] md:text-xs font-bold shadow-sm">
+                                                        <span class="material-symbols-rounded text-sm">edit</span>
+                                                        <span>تعديل</span>
+                                                    </a>
+                                                    <form method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <input type="hidden" name="question_id" value="{{ q.id }}">
+                                                        <button type="submit" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-900/30 transition-colors text-[11px] md:text-xs font-bold shadow-sm">
+                                                            <span class="material-symbols-rounded text-sm">delete</span>
+                                                            <span>حذف</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-wrap items-center gap-3 mt-3 text-xs">
+                                                <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                                    {% if q.question_type == 'mcq' %}اختيار من متعدد{% else %}مقالي{% endif %}
+                                                </span>
+                                                <span class="px-2.5 py-1 rounded-lg
+                                                    {% if q.difficulty == 'easy' %}bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border border-green-100 dark:border-green-900/30{% elif q.difficulty == 'medium' %}bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-400 border border-orange-100 dark:border-orange-900/30{% else %}bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400 border border-red-100 dark:border-red-900/30{% endif %}
+                                                ">
+                                                    {% if q.difficulty == 'easy' %}سهل{% elif q.difficulty == 'medium' %}متوسط{% else %}صعب{% endif %}
+                                                </span>
+                                                <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                                    درجة: {{ q.mark }}
+                                                </span>
+                                            </div>
+                                            {% if q.question_type == 'mcq' and q.choices.all %}
+                                            <div class="mt-3 space-y-1.5 text-xs">
+                                                {% for choice in q.choices.all %}
+                                                <div class="flex items-start gap-2">
+                                                    <div class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold
+                                                        {% if choice.is_correct %}
+                                                            bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-900/50
+                                                        {% else %}
+                                                            bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700
+                                                        {% endif %}
+                                                    ">
+                                                        {{ forloop.counter }}
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <span class="inline-block px-2 py-1 rounded-lg border text-[11px]
+                                                            {% if choice.is_correct %}
+                                                                bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300 border-green-200 dark:border-green-900/40
+                                                            {% else %}
+                                                                bg-white text-slate-700 dark:bg-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700
+                                                            {% endif %}
+                                                        ">
+                                                            {{ choice.text }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                            {% elif q.question_type == 'essay' and q.model_answer %}
+                                            <div class="mt-4 p-4 rounded-xl bg-purple-50/50 dark:bg-purple-900/10 border border-purple-100 dark:border-purple-900/20">
+                                                <div class="flex items-center gap-2 mb-2 text-purple-700 dark:text-purple-300">
+                                                    <span class="material-symbols-rounded text-sm">auto_awesome</span>
+                                                    <span class="text-[11px] font-bold">الإجابة النموذجية:</span>
+                                                </div>
+                                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed italic">
+                                                    {{ q.model_answer }}
+                                                </p>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="p-8 text-center text-slate-400 text-sm">
+                                    لا توجد أسئلة بعد لهذه المادة. ابدأ بإضافة سؤال من النموذج أعلاه.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl shadow-lg shadow-indigo-500/20 p-6 lg:p-8 text-white relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div>
+                        <h2 class="text-lg font-bold mb-2 flex items-center gap-2 relative z-10">
+                            <span class="material-symbols-rounded">auto_awesome</span>
+                            التوليد بالذكاء الاصطناعي
+                        </h2>
+                        <p class="text-indigo-100 text-sm mb-6 relative z-10 leading-relaxed">
+                            قم برفع ملف المادة أو لصق نص المحتوى، ودع المساعد الذكي يقترح أسئلة جاهزة تضاف مباشرة إلى بنك الأسئلة.
+                        </p>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="relative z-10 space-y-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="ai_generate">
+                        <div class="space-y-3 bg-white/5 rounded-xl p-4 border border-white/10">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="text-indigo-100 text-xs font-bold mb-1.5 block">عدد الأسئلة</label>
+                                    <input name="ai_num_questions" type="number" min="1" max="50" class="w-full bg-black/20 border border-indigo-300/30 rounded-lg px-3 py-2 text-white placeholder-indigo-200 text-sm focus:outline-none focus:border-white/60 focus:bg-black/30 transition-all" placeholder="مثال: 5">
+                                    {% if ai_errors.num %}
+                                    <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.num }}</p>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <label class="text-indigo-100 text-xs font-bold mb-1.5 block">نوع الأسئلة</label>
+                                    <select name="ai_question_type" class="w-full bg-black/20 border border-indigo-300/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white/60 focus:bg-black/30 transition-all [&>option]:text-slate-900" disabled>
+                                        <option value="mcq" selected>اختيار من متعدد</option>
+                                    </select>
+                                    <input type="hidden" name="ai_question_type" value="mcq">
+                                    <p class="text-[10px] text-indigo-200 mt-1">التوليد بالذكاء الاصطناعي متاح فقط لأسئلة الاختيار من متعدد</p>
+                                </div>
+                                <div>
+                                    <label class="text-indigo-100 text-xs font-bold mb-1.5 block">مستوى الصعوبة</label>
+                                    <select name="ai_difficulty" class="w-full bg-black/20 border border-indigo-300/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white/60 focus:bg-black/30 transition-all [&>option]:text-slate-900">
+                                        <option value="varied">متنوع</option>
+                                        <option value="easy">سهل</option>
+                                        <option value="medium">متوسط</option>
+                                        <option value="hard">صعب</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="text-indigo-100 text-xs font-bold mb-1.5 block">عدد الاختيارات لكل سؤال</label>
+                                    <input
+                                        name="ai_num_choices"
+                                        type="number"
+                                        min="2"
+                                        max="10"
+                                        class="w-full bg-black/20 border border-indigo-300/30 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white/60 focus:bg-black/30 transition-all"
+                                        placeholder="مثال: 4"
+                                    >
+                                    {% if ai_errors.num_choices %}
+                                    <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.num_choices }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-indigo-100 text-xs font-bold mb-1.5 block">نص المادة (اختياري إذا تم رفع ملف)</label>
+                                <textarea name="ai_text_source" rows="3" class="w-full bg-black/15 border border-indigo-300/30 rounded-lg px-3 py-2 text-white text-xs md:text-sm placeholder-indigo-200 focus:outline-none focus:border-white/60 focus:bg-black/30 transition-all" placeholder="يمكنك لصق ملخص أو جزء من الكتاب هنا لاستخدامه في التوليد..."></textarea>
+                                {% if ai_errors.text %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.text }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-indigo-100 text-xs font-bold mb-1.5 block">رفع ملف المادة (PDF, Word, TXT)</label>
+                                <label class="block cursor-pointer">
+                                    <input type="file" name="ai_file" accept=".pdf,.doc,.docx,.txt" class="hidden">
+                                    <div class="border-2 border-dashed border-white/40 rounded-xl p-4 flex flex-col items-center justify-center text-center bg-white/5 hover:bg-white/15 hover:border-white/70 transition-all duration-300">
+                                        <span class="material-symbols-rounded text-3xl mb-1">cloud_upload</span>
+                                        <span class="text-xs font-bold">اضغط هنا لاختيار ملف</span>
+                                        <span class="text-[11px] text-indigo-200 mt-1">يدعم ملفات PDF و Word و TXT</span>
+                                    </div>
+                                </label>
+                                {% if ai_errors.file %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.file }}</p>
+                                {% endif %}
+                                {% if ai_errors.connection %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.connection }}</p>
+                                {% endif %}
+                                {% if ai_errors.response %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.response }}</p>
+                                {% endif %}
+                                {% if ai_errors.timeout %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.timeout }}</p>
+                                {% endif %}
+                                {% if ai_errors.general %}
+                                <p class="text-[11px] text-red-200 mt-1">{{ ai_errors.general }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full mt-1 flex items-center justify-center gap-2 rounded-xl bg-white text-indigo-700 font-bold text-sm py-2.5 shadow-lg shadow-black/20 hover:bg-indigo-50 transition-colors">
+                            <span class="material-symbols-rounded text-base">auto_awesome</span>
+                            <span>توليد أسئلة وإضافتها إلى بنك الأسئلة</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+    (function () {
+        var questionTypeInput = document.getElementById("question-type-input");
+        var mcqFields = document.getElementById("mcq-fields");
+        var essayFields = document.getElementById("essay-fields");
+        var addChoiceBtn = document.getElementById("add-choice-btn");
+        var choicesContainer = document.getElementById("choices-container");
+        var nextIndexInput = document.getElementById("next-choice-index");
+        var typeButtons = document.querySelectorAll("[data-question-type]");
+
+        function toggleMcqFields(currentType) {
+            if (mcqFields) {
+                if (currentType === "mcq") {
+                    mcqFields.classList.remove("hidden");
+                } else {
+                    mcqFields.classList.add("hidden");
+                }
+            }
+            if (essayFields) {
+                if (currentType === "essay") {
+                    essayFields.classList.remove("hidden");
+                } else {
+                    essayFields.classList.add("hidden");
+                }
+            }
+        }
+
+        function addChoiceRow() {
+            if (!choicesContainer || !nextIndexInput) return;
+            var index = parseInt(nextIndexInput.value || "0");
+            var row = document.createElement("div");
+            row.className = "flex items-center gap-3 choice-row";
+            row.setAttribute("data-index", String(index));
+            row.innerHTML =
+                '<input type="radio" name="correct_choice" value="' + index + '" class="w-4 h-4 text-blue-600 border-slate-300 focus:ring-primary/40">' +
+                '<div class="flex-1 relative">' +
+                '<input name="choices[' + index + '][text]" type="text" class="choice-input w-full rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm py-2.5 px-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" placeholder="خيار إضافي">' +
+                '<span class="correct-badge absolute left-3 top-2.5 text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/50 px-2 py-0.5 rounded hidden">صحيح</span>' +
+                "</div>" +
+                '<button type="button" class="w-9 h-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all" data-remove-choice>' +
+                '<span class="material-symbols-rounded text-base">delete</span>' +
+                "</button>";
+            choicesContainer.appendChild(row);
+            nextIndexInput.value = String(index + 1);
+        }
+
+        function updateChoiceStyles() {
+            if (!choicesContainer) return;
+            var rows = choicesContainer.querySelectorAll(".choice-row");
+            rows.forEach(function (row) {
+                var radio = row.querySelector('input[type="radio"][name="correct_choice"]');
+                var input = row.querySelector(".choice-input");
+                var badge = row.querySelector(".correct-badge");
+                if (!input) return;
+                input.classList.remove("border-green-500", "bg-green-50/40", "dark:bg-green-900/10");
+                if (badge) {
+                    badge.classList.add("hidden");
+                }
+                if (radio && radio.checked) {
+                    input.classList.add("border-green-500", "bg-green-50/40", "dark:bg-green-900/10");
+                    if (badge) {
+                        badge.classList.remove("hidden");
+                    }
+                }
+            });
+        }
+
+        function setQuestionType(type) {
+            if (!questionTypeInput) return;
+            questionTypeInput.value = type;
+            toggleMcqFields(type);
+            if (!typeButtons) return;
+            typeButtons.forEach(function (btn) {
+                var btnType = btn.getAttribute("data-question-type") || "";
+                btn.classList.remove(
+                    "border-2",
+                    "border-blue-500",
+                    "bg-blue-50",
+                    "dark:bg-blue-900/20",
+                    "border-purple-500",
+                    "bg-purple-50/50",
+                    "dark:bg-purple-900/20"
+                );
+                btn.classList.remove("border", "border-slate-200", "dark:border-slate-600", "bg-slate-50", "dark:bg-slate-800/30");
+                if (btnType === "mcq" && type === "mcq") {
+                    btn.classList.add("border-2", "border-blue-500", "bg-blue-50", "dark:bg-blue-900/20");
+                } else if (btnType === "essay" && type === "essay") {
+                    btn.classList.add("border-2", "border-purple-500", "bg-purple-50/50", "dark:bg-purple-900/20");
+                } else {
+                    btn.classList.add("border", "border-slate-200", "dark:border-slate-600", "bg-slate-50", "dark:bg-slate-800/30");
+                }
+            });
+            var mcqIcon = document.querySelector(".mcq-selected-icon");
+            if (mcqIcon) {
+                if (type === "mcq") {
+                    mcqIcon.classList.remove("hidden");
+                } else {
+                    mcqIcon.classList.add("hidden");
+                }
+            }
+        }
+
+        function onChoicesClick(event) {
+            var target = event.target;
+            if (!(target instanceof Element)) return;
+            var removeBtn = target.closest("[data-remove-choice]");
+            if (!removeBtn) return;
+            var row = removeBtn.closest(".choice-row");
+            if (!row) return;
+            var allRows = choicesContainer.querySelectorAll(".choice-row");
+            if (allRows.length <= 2) return;
+            row.remove();
+        }
+
+        if (typeButtons && typeButtons.length && questionTypeInput) {
+            typeButtons.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    var t = btn.getAttribute("data-question-type") || "mcq";
+                    setQuestionType(t);
+                });
+            });
+            var initialType = questionTypeInput.value || "mcq";
+            setQuestionType(initialType);
+        } else {
+            toggleMcqFields(questionTypeInput ? questionTypeInput.value || "mcq" : "mcq");
+        }
+        if (addChoiceBtn) {
+            addChoiceBtn.addEventListener("click", addChoiceRow);
+        }
+        if (choicesContainer) {
+            choicesContainer.addEventListener("click", onChoicesClick);
+            choicesContainer.addEventListener("change", function (event) {
+                var target = event.target;
+                if (!(target instanceof Element)) return;
+                if (target.matches('input[type="radio"][name="correct_choice"]')) {
+                    updateChoiceStyles();
+                }
+            });
+            updateChoiceStyles();
+        }
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>إنشاء حساب جديد - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb", // Bright blue from the button
+              secondary: "#101827", // Dark blue/black for accents
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f3f4f6",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              "xl": "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        
+        /* Role Selection Visuals */
+        input[name="role"]:checked + div {
+            opacity: 1;
+            filter: grayscale(0);
+        }
+        .role-wrapper:has(input[name="role"]:checked) .role-label:not(:has(input[name="role"]:checked)) div {
+            opacity: 0.3;
+            pointer-events: none;
+            filter: grayscale(1);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+
+    <!-- Left Side: Image & Stats (Hidden on mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 relative flex-col justify-center items-center text-white p-12 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img alt="Abstract futuristic blue wave background" class="w-full h-full object-cover opacity-90 brightness-75" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLcQGh_sivNExyBem47QGBDvqUQSdAwzYo-qQ1HdzhCAvSuhv821SSGZWrcnj-QnKPrpKC2l-cZo1oAQyHiStkOJB3bdUIRU86beBsJozKNJ58QUCX1CQe7j0H6K47ofeBxW5nBaLERB_y_PF8vO_wrpDX82YMb8ZDoQLluUhnltSAhRgyKPoGd51UpGnHmGnihF-Ppx2pAGKgZI9uAE1hzoVtcW2Obqu5W7SuXDpSV8BpR-Q1_boiKFJuLSiUuFSW-kH2x97RmvM"/>
+            <div class="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-blue-900/60 to-slate-900/90 mix-blend-multiply"></div>
+        </div>
+        <div class="relative z-10 w-full max-w-lg text-center flex flex-col items-center">
+            <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mb-8 shadow-lg ring-1 ring-white/30">
+                <span class="material-symbols-rounded text-4xl text-white">auto_awesome</span>
+            </div>
+            <h1 class="text-4xl font-extrabold mb-6 leading-tight drop-shadow-md">
+                مستقبل التعليم بين يديك
+            </h1>
+            <p class="text-lg text-blue-50/90 mb-12 leading-relaxed max-w-md mx-auto font-medium">
+                انضم إلى الآلاف من المعلمين والطلاب الذين يستخدمون ذكائنا الاصطناعي لإنشاء اختبارات دقيقة، وتحليل الأداء، وتحسين رحلة التعلم بشكل لم يسبق له مثيل.
+            </p>
+            <div class="grid grid-cols-2 gap-4 w-full">
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center hover:bg-white/15 transition-all duration-300">
+                    <div class="text-3xl font-bold mb-1">+٥٠ ألف</div>
+                    <div class="text-sm text-blue-100/80">اختبار تم إنشاؤه</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 text-center hover:bg-white/15 transition-all duration-300">
+                    <div class="text-3xl font-bold mb-1">٪٩٨</div>
+                    <div class="text-sm text-blue-100/80">دقة التحليل</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Signup Form -->
+    <div class="w-full lg:w-1/2 h-full overflow-y-auto bg-background-light dark:bg-background-dark flex flex-col items-center justify-center p-6 sm:p-12 relative">
+        
+        <!-- Top Controls (Theme & Lang) -->
+        <div class="absolute top-6 left-6 flex flex-col items-center gap-3 z-20">
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-primary hover:border-primary dark:hover:border-primary shadow-sm transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-rounded text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-rounded text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <div class="flex flex-col p-1 rounded-xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 shadow-sm">
+                <button class="w-10 h-9 flex items-center justify-center text-xs font-bold rounded-lg bg-primary text-white shadow-sm transition-all mb-1" type="button">AR</button>
+                <button class="w-10 h-9 flex items-center justify-center text-xs font-bold rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-all" type="button">EN</button>
+            </div>
+        </div>
+
+        <div class="w-full max-w-md">
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-8 justify-center lg:justify-end">
+                <span class="text-lg font-bold text-slate-900 dark:text-white">منصة الاختبارات الذكية</span>
+                <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary">
+                    <span class="material-symbols-rounded">psychology</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-3">إنشاء حساب جديد</h2>
+                <p class="text-slate-500 dark:text-slate-400">
+                    أدخل بياناتك للبدء في استخدام أحدث أدوات التقييم بالذكاء الاصطناعي.
+                </p>
+            </div>
+
+            <!-- Form -->
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Role Selection -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">سجل كـ:</label>
+                    <div class="grid grid-cols-2 gap-4 role-wrapper">
+                        <!-- Student Option -->
+                        <label class="relative cursor-pointer group role-label">
+                            <input class="peer sr-only" name="role" type="radio" value="student" {% if form.role.value == 'student' or not form.role.value %}checked{% endif %}/>
+                            <div class="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl border-2 border-transparent bg-surface-light dark:bg-surface-dark text-slate-400 dark:text-slate-500 transition-all duration-300 peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:border-primary peer-checked:text-primary dark:peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-500/10 peer-checked:scale-[1.02] opacity-60 grayscale hover:opacity-80 peer-checked:opacity-100 peer-checked:grayscale-0">
+                                <span class="material-symbols-rounded text-3xl">school</span>
+                                <span class="font-bold text-lg">طالب</span>
+                            </div>
+                        </label>
+                        
+                        <!-- Teacher Option -->
+                        <label class="relative cursor-pointer group role-label">
+                            <input class="peer sr-only" name="role" type="radio" value="teacher" {% if form.role.value == 'teacher' %}checked{% endif %}/>
+                            <div class="flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl border-2 border-transparent bg-surface-light dark:bg-surface-dark text-slate-400 dark:text-slate-500 transition-all duration-300 peer-checked:bg-white dark:peer-checked:bg-slate-800 peer-checked:border-primary peer-checked:text-primary dark:peer-checked:text-white peer-checked:shadow-lg peer-checked:shadow-blue-500/10 peer-checked:scale-[1.02] opacity-60 grayscale hover:opacity-80 peer-checked:opacity-100 peer-checked:grayscale-0">
+                                <span class="material-symbols-rounded text-3xl">cast_for_education</span>
+                                <span class="font-bold text-lg">معلم</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Full Name -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" for="id_full_name">الاسم الكامل</label>
+                    <div class="relative">
+                        <input class="w-full pl-4 pr-4 py-3 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white text-right" 
+                               dir="rtl" id="id_full_name" name="full_name" placeholder="أدخل اسمك الكامل" type="text" value="{{ form.full_name.value|default:'' }}">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-rounded text-slate-400">person</span>
+                        </div>
+                    </div>
+                    {% if form.full_name.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.full_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" for="id_email">البريد الإلكتروني</label>
+                    <div class="relative">
+                        <input class="w-full pl-4 pr-4 py-3 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white text-left placeholder:text-right" 
+                               dir="ltr" id="id_email" name="email" placeholder="name@example.com" type="email" value="{{ form.email.value|default:'' }}">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-rounded text-slate-400">mail</span>
+                        </div>
+                    </div>
+                    {% if form.email.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" for="id_password">كلمة المرور</label>
+                    <div class="relative">
+                        <input class="w-full pl-4 pr-4 py-3 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-slate-400 dark:text-white text-left placeholder:text-right" 
+                               dir="ltr" id="id_password" name="password" placeholder="••••••••" type="password">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center cursor-pointer" onclick="togglePassword()">
+                            <span id="password-toggle-icon" class="material-symbols-rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">visibility_off</span>
+                        </div>
+                    </div>
+                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400 text-right">يجب أن تحتوي على 8 أحرف على الأقل</p>
+                    {% if form.password.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.password.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Security Notice -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl p-4 flex items-start gap-3">
+                    <span class="material-symbols-rounded text-primary mt-0.5 shrink-0">lock_person</span>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1">تأمين الحساب</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                            لزيادة الأمان، سنرشدك لتفعيل <span class="font-bold text-primary">المصادقة الثنائية (2FA)</span> في الخطوة التالية بعد إنشاء الحساب.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-[0.98]" type="submit">
+                    إنشاء الحساب
+                </button>
+
+                <!-- Login Link -->
+                <p class="text-center text-sm text-slate-600 dark:text-slate-400 mt-4">
+    لديك حساب بالفعل؟
+    <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4" href="{% url 'login' %}">تسجيل الدخول</a>
+</p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('id_password');
+            const icon = document.getElementById('password-toggle-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+    </script>
+</body>
+</html>

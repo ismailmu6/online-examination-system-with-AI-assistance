@@ -1,0 +1,250 @@
+%%{init: {
+  'theme':'base',
+  'themeVariables': {
+    'primaryColor':'#1976D2',
+    'primaryTextColor':'#fff',
+    'primaryBorderColor':'#1976D2',
+    'lineColor':'#1976D2',
+    'secondaryColor':'#E3F2FD',
+    'background':'#ffffff'
+  }
+}}%%
+
+classDiagram
+    class ExamStatus {
+        <<enumeration>>
+        draft
+        scheduled
+        ongoing
+        finished
+    }
+
+    class QuestionDifficulty {
+        <<enumeration>>
+        easy
+        medium
+        hard
+    }
+
+    class QuestionQuestionType {
+        <<enumeration>>
+        mcq
+        essay
+    }
+
+    class StudentExamStatus {
+        <<enumeration>>
+        in_progress
+        finished
+        failed_cheating
+    }
+
+    class ExamEventEventType {
+        <<enumeration>>
+        join
+        submit
+        progress
+        cheating_visibility
+        cheating_clipboard
+        camera_allowed
+        camera_denied
+    }
+
+    class StudentJoinRequestSource {
+        <<enumeration>>
+        from_student
+        from_teacher
+    }
+
+    class StudentJoinRequestStatus {
+        <<enumeration>>
+        pending
+        accepted
+        rejected
+    }
+
+    class MessageDirection {
+        <<enumeration>>
+        teacher_to_supervisor
+        supervisor_to_teacher
+        teacher_to_student
+        student_to_teacher
+        supervisor_to_supervisor
+    }
+
+    class ProctorAudioStreamStreamStatus {
+        <<enumeration>>
+        waiting
+        active
+        paused
+        ended
+    }
+
+    class UserRole {
+        <<enumeration>>
+        student
+        teacher
+    }
+
+    namespace UserManagement {
+        class User {
+            <<extends AbstractUser>>
+            +String username
+            +String email
+            +Boolean is_active
+            +String role
+            +String full_name
+            +__str__() String
+        }
+
+        class TeacherNotificationSettings {
+            +__str__() String
+        }
+
+    }
+
+    namespace AcademicManagement {
+        class Subject {
+            +String name
+            +__str__() String
+        }
+
+        class Group {
+            +String name
+            +String code
+            +__str__() String
+        }
+
+        class Question {
+            +String text
+            +__str__() String
+        }
+
+        class QuestionChoice {
+            +String text
+            +__str__() String
+        }
+
+    }
+
+    namespace ExamManagement {
+        class Exam {
+            +String title
+            +DateTime start_time
+            +Integer duration_minutes
+            +String status
+            +Integer total_mark
+            +Integer pass_mark
+            +__str__() String
+        }
+
+        class ExamQuestion {
+            +__str__() String
+        }
+
+        class StudentExam {
+            +String status
+            +Decimal score
+            +__str__() String
+        }
+
+        class StudentAnswer {
+            +__str__() String
+        }
+
+        class ExamEvent {
+            +String message
+            +__str__() String
+        }
+
+        class ExamNotification {
+            +String message
+            +__str__() String
+        }
+
+    }
+
+    namespace ProctoringSystem {
+        class ProctorSession {
+            +Boolean is_active
+            +Boolean camera_enabled
+            +Boolean microphone_enabled
+            +__str__() String
+        }
+
+        class ProctorSnapshot {
+            +Boolean suspicious
+            +__str__() String
+        }
+
+        class ProctorAudioStream {
+            +String status
+            +__str__() String
+        }
+
+    }
+
+    namespace CommunicationSystem {
+        class Message {
+            +String title
+            +String body
+            +Boolean is_read
+            +__str__() String
+        }
+
+        class GroupMessage {
+            +String content
+            +__str__() String
+        }
+
+        class StudentJoinRequest {
+            +String status
+            +__str__() String
+        }
+
+    }
+
+    namespace SystemConfiguration {
+        class SystemSettings {
+            +String platform_name
+            +String two_factor_email
+            +__str__() String
+            +load() SystemSettings$
+        }
+
+    }
+
+    User "1" *-- "1" TeacherNotificationSettings : owns
+    Subject "1" o-- "*" Group : organizes
+    Subject "1" *-- "*" Question : defines
+    Question "1" *-- "*" QuestionChoice : has
+    Subject "1" o-- "*" Exam : offers
+    Exam "1" *-- "*" ExamQuestion : contains
+    Exam "1" o-- "*" StudentExam : attempts
+    Exam "1" *-- "*" ExamEvent : logs
+    ExamQuestion "1" o-- "*" StudentAnswer : answered by
+    StudentExam "1" *-- "*" StudentAnswer : includes
+    Exam "1" o-- "*" ProctorSession : monitors
+    StudentExam "0..1" --> "*" ProctorSession : linked
+    ProctorSession "1" *-- "*" ProctorSnapshot : captures
+    ProctorSession "1" *-- "1" ProctorAudioStream : streams
+    Group "1" *-- "*" GroupMessage : messages
+    Message "0..1" --> "*" Message : replies_to
+    Group "1" o-- "*" StudentJoinRequest : requests
+    User "1" --> "*" Subject : teaches
+    User "*" --> "*" Subject : enrolled_in
+    User "1" --> "*" Group : manages
+    User "*" --> "*" Group : member_of
+    User "1" --> "*" Question : creates
+    User "1" --> "*" Exam : creates
+    User "*" --> "*" Exam : allowed_for
+    User "1" --> "*" StudentExam : attempts
+    User "1" --> "*" ExamEvent : triggers
+    User "1" --> "*" Message : sends
+    User "1" --> "*" Message : receives
+    Exam "1" *-- "*" ExamNotification : notifies
+    User "1" --> "*" GroupMessage : sends
+    User "1" --> "*" StudentJoinRequest : submits
+    User "1" --> "*" StudentJoinRequest : receives
+    Question "*" --> "*" ExamQuestion : reused_in
+    QuestionChoice "0..1" --> "*" StudentAnswer : selected

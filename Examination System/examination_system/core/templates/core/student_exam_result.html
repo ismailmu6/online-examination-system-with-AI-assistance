@@ -1,0 +1,229 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>نتائج الاختبار - منصة الاختبارات الذكية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#1d72eb",
+              secondary: "#101827",
+              "background-light": "#ffffff",
+              "background-dark": "#0f172a",
+              "surface-light": "#f8fafc",
+              "surface-dark": "#1e293b",
+            },
+            fontFamily: {
+              display: ["Cairo", "sans-serif"],
+              body: ["Cairo", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              xl: "1rem",
+              "2xl": "1.5rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+              'FILL' 0,
+              'wght' 400,
+              'GRAD' 0,
+              'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-surface-light dark:bg-background-dark text-slate-800 dark:text-slate-100 h-screen overflow-hidden flex transition-colors duration-300">
+<aside class="w-72 bg-white dark:bg-surface-dark border-l border-slate-200 dark:border-slate-700 hidden lg:flex flex-col z-20 shadow-sm transition-colors duration-300" data-student-sidebar>
+    <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700/50">
+        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center text-primary shrink-0">
+            <span class="material-symbols-outlined">school</span>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg font-extrabold text-slate-900 dark:text-white leading-none">منصة الاختبارات</span>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">لوحة الطالب</span>
+        </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+        <a href="{% url 'student_dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200 font-medium">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+            <span>لوحة التحكم</span>
+        </a>
+        <a href="{% url 'student_exams' %}" class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl transition-all font-bold shadow-sm ring-1 ring-primary/20">
+            <span class="material-symbols-outlined">quiz</span>
+            <span>اختباراتي</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 dark:text-slate-500 rounded-xl text-sm select-none">
+            <span class="material-symbols-outlined">groups</span>
+            <span>مجموعاتي</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 dark:text-slate-500 rounded-xl text-sm select-none">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>التقارير</span>
+        </a>
+        <a href="{% url 'student_teachers' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-100 font-medium">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">person_outline</span>
+            <span>المدرسون</span>
+        </a>
+    </nav>
+    <div class="p-4 border-t border-slate-100 dark:border-slate-700/50">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="flex items-center gap-3 w-full p-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl transition-colors text-right group">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-400 flex items-center justify-center text-white font-bold shadow-md shrink-0">
+                    {{ request.user.full_name|default:request.user.username|slice:":2" }}
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <div class="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {{ request.user.full_name|default:request.user.username }}
+                    </div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400 truncate group-hover:text-primary transition-colors">
+                        طالب
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-slate-400 group-hover:text-red-500 transition-colors">logout</span>
+            </button>
+        </form>
+    </div>
+</aside>
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <header class="h-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 lg:px-10 z-10 sticky top-0 transition-colors duration-300">
+        <button class="lg:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" data-sidebar-toggle>
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center bg-slate-100 dark:bg-surface-dark rounded-xl p-1 h-10">
+                <button class="px-3 h-full rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm text-sm font-bold transition-all">AR</button>
+                <button class="px-3 h-full rounded-lg text-slate-500 dark:text-slate-400 hover:text-primary text-sm font-bold transition-all">EN</button>
+            </div>
+            <button aria-label="Toggle theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-500 dark:text-slate-400 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 group" onclick="document.documentElement.classList.toggle('dark')">
+                <span class="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform block dark:hidden">dark_mode</span>
+                <span class="material-symbols-outlined text-xl group-hover:-rotate-12 transition-transform hidden dark:block">light_mode</span>
+            </button>
+            <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 hover:text-primary hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300">
+                <span class="material-symbols-outlined text-xl">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 overflow-y-auto p-6 lg:p-10 pb-20">
+        <div class="max-w-4xl mx-auto space-y-8">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+                <div class="flex items-center gap-4">
+                    <a class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary/50 transition-all shadow-sm" href="{% url 'student_exams' %}">
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">نتائج الاختبار</h1>
+                        <div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-medium">
+                            <span>اختباراتي</span>
+                            <span class="material-symbols-outlined text-xs">chevron_left</span>
+                            <span class="text-primary">
+                                {% if exam.subject %}{{ exam.subject.name }}{% else %}اختبار{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-surface-dark rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden relative">
+                <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800">
+                    <div class="h-full bg-emerald-500 rounded-r-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" style="width: {{ score_percent }}%;"></div>
+                </div>
+                <div class="p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div class="relative shrink-0">
+                        <svg class="w-40 h-40 transform -rotate-90">
+                            <circle class="text-slate-100 dark:text-slate-800" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="10"></circle>
+                            <circle class="text-emerald-500 transition-all duration-1000 ease-out" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="{{ circle_dasharray }}" stroke-dashoffset="{{ circle_dashoffset }}" stroke-linecap="round" stroke-width="10"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-4xl font-black text-slate-900 dark:text-white">{{ score_percent }}</span>
+                            <span class="text-sm font-bold text-slate-400 uppercase tracking-wider mt-1">
+                                من {{ total_mark }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex-1 w-full text-center md:text-right">
+                        <div class="flex flex-col md:flex-row items-center gap-3 mb-6">
+                            <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+                                {{ exam.title }}
+                            </h2>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold {% if is_pass %}bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20{% else %}bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20{% endif %}">
+                                <span class="material-symbols-outlined text-[16px] filled">
+                                    {% if is_pass %}check_circle{% else %}error{% endif %}
+                                </span>
+                                {% if is_pass %}ناجح{% else %}راسب{% endif %}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 hover:border-slate-300 transition-colors">
+                                <div class="text-xs font-bold text-slate-400 mb-1">الأسئلة</div>
+                                <div class="text-xl font-extrabold text-slate-700 dark:text-slate-200">{{ total_questions }}</div>
+                            </div>
+                            <div class="bg-emerald-50/50 dark:bg-emerald-900/10 p-4 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
+                                <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">صحيحة</div>
+                                <div class="text-xl font-extrabold text-emerald-700 dark:text-emerald-400">{{ correct_count }}</div>
+                            </div>
+                            <div class="bg-red-50/50 dark:bg-red-900/10 p-4 rounded-xl border border-red-100 dark:border-red-900/20">
+                                <div class="text-xs font-bold text-red-600 dark:text-red-400 mb-1">خاطئة</div>
+                                <div class="text-xl font-extrabold text-red-700 dark:text-red-400">{{ wrong_count }}</div>
+                            </div>
+                            <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 hover:border-slate-300 transition-colors">
+                                <div class="text-xs font-bold text-slate-400 mb-1">الوقت المستغرق</div>
+                                <div class="text-xl font-extrabold text-slate-700 dark:text-slate-200">
+                                    {% if time_spent_minutes is not None %}
+                                        {{ time_spent_minutes }}د
+                                    {% else %}
+                                        --
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var toggle = document.querySelector("[data-sidebar-toggle]");
+  var sidebar = document.querySelector("[data-student-sidebar]");
+  if (toggle && sidebar) {
+    toggle.addEventListener("click", function () {
+      if (window.innerWidth >= 1024) return;
+      sidebar.classList.toggle("hidden");
+    });
+  }
+});
+</script>
+</body>
+</html>
+
